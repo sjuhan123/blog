@@ -1,0 +1,57 @@
+.mdx > * {
+  margin-bottom: 1.75rem;
+}
+
+.mdx ol {
+  --counter-space: 12px;
+  padding: 0;
+  counter-reset: basics-ol;
+  list-style-type: none;
+}
+
+.mdx ol li {
+  --l: calc(2 * var(--counter-space));
+  padding-left: var(--l);
+  text-indent: calc(-1 * var(--l));
+}
+
+.mdx ol li:before {
+  display: inline-flex;
+  min-width: var(--counter-space);
+  align-items: center;
+  justify-content: flex-end;
+  margin-right: var(--counter-space);
+  color: var(--tw-prose-bullets);
+  content: counter(basics-ol) '. ';
+  counter-increment: basics-ol;
+  font-feature-settings: 'tnum' 1;
+  letter-spacing: -0.05em;
+  line-height: normal;
+  text-align: right;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.mdx ul {
+  margin-top: 0px;
+  padding-left: 16px;
+  list-style-position: outside;
+  list-style-type: disc;
+}
+
+.mdx li {
+  display: list-item;
+  line-height: 1.75rem;
+  margin: 0px;
+}
+
+.mdx li + li,
+.mdx li > ul {
+  margin-top: 7px;
+  margin-bottom: 0px;
+}
+
+.mdx p:has(+ :where(ul, ol)) {
+  @apply mb-2;
+}
