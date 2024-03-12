@@ -41,7 +41,7 @@ const { Content } = await post.render();
     {
         (prevPost || nextPost) && (
             <div class="flex justify-between mb-10">
-                {prevPost && <TitlePreview post={prevPost} class="items-start" direction='prev' />}
+                {prevPost ? <TitlePreview post={prevPost} class="items-start" direction='prev' /> : <div></div>}
                 {nextPost && <TitlePreview post={nextPost} class="items-end" direction='next' />}
             </div>
         )
