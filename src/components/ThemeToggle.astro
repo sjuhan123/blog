@@ -1,15 +1,16 @@
 ---
+import { Icon } from "astro-icon/components";
 
 ---
 
-<button id="theme-toggle" class="w-8 h-8 -mr-2 flex items-center justify-center" aria-label="Change color scheme">
-    <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="8" cy="8" r="8"></circle>
-    </svg>
+<button id="theme-toggle" class="w-8 h-8 flex items-center justify-center" aria-label="Change color scheme">
+    <Icon name="line-md:moon-alt-to-sunny-outline-loop-transition" size={27} />
 </button>
 
 <script>
     document.addEventListener('astro:page-load', () => {
+        const toggleButton = document.getElementById('theme-toggle');
+
         const theme = (() => {
             if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
                 return localStorage.getItem('theme') || 'light';
@@ -36,7 +37,8 @@
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
         };
 
-        document.getElementById('theme-toggle')?.addEventListener('click', handleToggleClick);
+        
+        toggleButton?.addEventListener('click', handleToggleClick);
     });
 </script>
 
