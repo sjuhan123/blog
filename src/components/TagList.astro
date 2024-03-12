@@ -1,0 +1,11 @@
+---
+type Props = { tags: string[] };
+
+const { tags } = Astro.props
+---
+
+<ul class="flex gap-2">
+    {tags.map((tag) => (
+        <li class="text-sm text-sky-400">#{tag}</li>
+    ))}
+</ul>
