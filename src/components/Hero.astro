@@ -1,6 +1,5 @@
 ---
-import { marked } from 'marked';
-import Button from './Button.astro';
+import { Icon } from 'astro-icon/components'
 import siteConfig from '../data/site-config';
 
 const hero = siteConfig.hero;
@@ -8,7 +7,7 @@ const hero = siteConfig.hero;
 
 {
     (hero?.title || hero?.image?.src || hero?.text || (hero?.actions && hero.actions.length > 0)) && (
-        <section class="w-full flex flex-col gap-8 mb-16 sm:mb-24">
+        <section class="w-full flex flex-col gap-2 mb-16 sm:mb-24">
             {hero.title && <h1 class="text-3xl leading-tight font-serif font-medium sm:text-5xl sm:leading-tight">{hero.title}</h1>}
             {hero.image?.src && (
                 <figure>
@@ -16,11 +15,19 @@ const hero = siteConfig.hero;
                     {hero.image.caption && <figcaption class="mt-1.5 text-xs sm:text-sm">{hero.image.caption}</figcaption>}
                 </figure>
             )}
-            {hero.text && <div class="max-w-none prose prose-dante sm:prose-lg" set:html={marked.parse(hero.text)} />}
-            {hero.actions && hero.actions.length > 0 && (
-                <div class="flex flex-wrap gap-4">
-                    {hero.actions.map((action) => (
-                        <Button href={action.href}>{action.text}</Button>
+            <div class="flex flex-col gap-2 text-lg mb-6">
+                <p>사용하기 <b>편리한 서비스</b>가 많은 사람들을 도울 수 있을 것이라 믿습니다</p> 
+                <p><b>유쾌한 경험</b>을 주는 UI/UX를 구현하는 것에서 뿌듯함과 성취감을 느낍니다.</p> 
+            </div>
+            <div class="flex flex-col gap-2 text-lg mb-6">
+                <p>현재는 <b>IT기기 사용에 어려움이 많은 어르신들을</b> 위한 서비스를 개발하고 있습니다.</p>
+            </div>
+            {hero.socialLinks && hero.socialLinks.length > 0 && (
+                <div class="flex flex-wrap gap-3">
+                    {hero.socialLinks.map((link) => (
+                        <a href={link.href}>
+                            <Icon name={link.name} size={17} />
+                        </a>
                     ))}
                 </div>
             )}
