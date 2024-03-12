@@ -1,121 +1,77 @@
 export type Image = {
-    src: string;
-    alt?: string;
-    caption?: string;
+  src: string;
+  alt?: string;
+  caption?: string;
 };
 
 export type Link = {
-    text: string;
-    href: string;
+  text: string;
+  href: string;
+};
+
+export type Icon = {
+  name: string;
+  href: string;
 };
 
 export type Hero = {
-    title?: string;
-    text?: string;
-    image?: Image;
-    actions?: Link[];
-};
-
-export type Subscribe = {
-    title?: string;
-    text?: string;
-    formUrl: string;
+  title?: string;
+  text?: string;
+  textFooter?: string;
+  image?: Image;
+  socialLinks?: Icon[];
+  actions?: Link[];
 };
 
 export type SiteConfig = {
-    logo?: Image;
-    title: string;
-    subtitle?: string;
-    description: string;
-    image?: Image;
-    headerNavLinks?: Link[];
-    footerNavLinks?: Link[];
-    socialLinks?: Link[];
-    hero?: Hero;
-    subscribe?: Subscribe;
-    postsPerPage?: number;
-    projectsPerPage?: number;
+  logo?: Image;
+  title: string;
+  subtitle?: string;
+  description: string;
+  image?: Image;
+  headerNavLinks?: Link[];
+  socialLinks?: Link[];
+  hero?: Hero;
+  postsPerPage?: number;
+  projectsPerPage?: number;
 };
 
 const siteConfig: SiteConfig = {
-    title: 'Dante',
-    subtitle: 'Minimal Astro.js theme',
-    description: 'Astro.js and Tailwind CSS theme for blog and portfolio by justgoodui.com',
-    image: {
-        src: '/dante-preview.jpg',
-        alt: 'Dante - Astro.js and Tailwind CSS theme'
+  title: '한승주﹒Den',
+  description: '한승주의 개인 블로그',
+  image: {
+    src: '/dante-preview.jpg',
+    alt: 'Dante - Astro.js and Tailwind CSS theme'
+  },
+  headerNavLinks: [
+    {
+      text: '글쓴이',
+      href: '/'
     },
-    headerNavLinks: [
-        {
-            text: 'Home',
-            href: '/'
-        },
-        {
-            text: 'Projects',
-            href: '/projects'
-        },
-        {
-            text: 'Blog',
-            href: '/blog'
-        },
-        {
-            text: 'Tags',
-            href: '/tags'
-        }
-    ],
-    footerNavLinks: [
-        {
-            text: 'About',
-            href: '/about'
-        },
-        {
-            text: 'Contact',
-            href: '/contact'
-        },
-        {
-            text: 'Terms',
-            href: '/terms'
-        },
-        {
-            text: 'Download theme',
-            href: 'https://github.com/JustGoodUI/dante-astro-theme'
-        }
-    ],
+    {
+      text: '글',
+      href: '/blog'
+    }
+  ],
+  hero: {
+    text: `사용하기 <u>편리한 서비스</u>가 많은 사람들을 도울 수 있을 것이라 믿습니다.
+\n**유쾌한 경험**을 주는 UI/UX를 구현하는 것에서 뿌듯함과 성취감을 느낍니다.`,
+    textFooter: '현재는 **IT기기 사용에 어려움이 많은 어르신들을** 위한 서비스를 개발하고 있습니다.',
     socialLinks: [
-        {
-            text: 'Dribbble',
-            href: 'https://dribbble.com/'
-        },
-        {
-            text: 'Instagram',
-            href: 'https://instagram.com/'
-        },
-        {
-            text: 'X/Twitter',
-            href: 'https://twitter.com/'
-        }
-    ],
-    hero: {
-        title: 'Hi There & Welcome to My Corner of the Web!',
-        text: "I'm **Ethan Donovan**, a web developer at Amazing Studio, dedicated to the realms of collaboration and artificial intelligence. My approach involves embracing intuition, conducting just enough research, and leveraging aesthetics as a catalyst for exceptional products. I have a profound appreciation for top-notch software, visual design, and the principles of product-led growth. Feel free to explore some of my coding endeavors on <a href='https://github.com/JustGoodUI/dante-astro-theme'>GitHub</a> or follow me on <a href='https://twitter.com/justgoodui'>Twitter/X</a>.",
-        image: {
-            src: '/hero.jpeg',
-            alt: 'A person sitting at a desk in front of a computer'
-        },
-        actions: [
-            {
-                text: 'Get in Touch',
-                href: '/contact'
-            }
-        ]
-    },
-    subscribe: {
-        title: 'Subscribe to Dante Newsletter',
-        text: 'One update per week. All the latest posts directly in your inbox.',
-        formUrl: '#'
-    },
-    postsPerPage: 8,
-    projectsPerPage: 8
+      {
+        name: 'mdi:email-outline',
+        href: 'sjuhan123@gmail.com'
+      },
+      {
+        name: 'mdi:github',
+        href: 'https://github.com/sjuhan123'
+      },
+      {
+        name: 'skill-icons:linkedin',
+        href: 'https://www.linkedin.com/in/%EC%8A%B9%EC%A3%BC-%ED%95%9C-37518021a/'
+      }
+    ]
+  }
 };
 
 export default siteConfig;
