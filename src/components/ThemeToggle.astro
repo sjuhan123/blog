@@ -8,6 +8,8 @@ import { Icon } from "astro-icon/components";
 </button>
 
 <script>
+    import { changeGiscusTheme } from "./PostComments";
+
     document.addEventListener('astro:page-load', () => {
         const toggleButton = document.getElementById('theme-toggle');
 
@@ -34,7 +36,10 @@ import { Icon } from "astro-icon/components";
             element.classList.toggle('dark');
 
             const isDark = element.classList.contains('dark');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            const currentTheme = isDark ? 'dark' : 'light';    
+        
+            localStorage.setItem('theme', currentTheme);
+            changeGiscusTheme(currentTheme);
         };
 
         

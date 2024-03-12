@@ -4,6 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import { sortItemsByDateDesc } from '../../utils/data-utils';
 import TitlePreview from '../../components/TitlePreview.astro';
+import { GiscusSection } from '../../components/PostComments';
 
 export async function getStaticPaths() {
     const posts = (await getCollection('blog')).sort(sortItemsByDateDesc);
@@ -21,7 +22,7 @@ export async function getStaticPaths() {
 type Props = { post: CollectionEntry<'blog'>; prevPost: CollectionEntry<'blog'>; nextPost: CollectionEntry<'blog'> };
 
 const { post, prevPost, nextPost } = Astro.props;
-const { title, publishDate, excerpt, tags = [], seo } = post.data;
+const { title, publishDate, excerpt, seo } = post.data;
 const { Content } = await post.render();
 ---
 
@@ -46,6 +47,7 @@ const { Content } = await post.render();
             </div>
         )
     }
+    <GiscusSection client:load />
 </BaseLayout>
 
 <script>
