@@ -1,7 +1,7 @@
 import { type CollectionEntry } from 'astro:content';
 import { useState } from 'react';
 import type { Entries } from '../types';
-import { Icon } from 'astro-icon/components';
+import CheckSVG from './CheckSVG';
 import { GithubSVG } from './Github';
 
 type Post = {
@@ -67,9 +67,12 @@ const Calendar = ({
           <a href={`/memory/${year}-${month < 10 ? `0${month}` : month}-${i}`} key={`next${i}`}>
             <div
               key={`curr${i}`}
-              className={`cursor-pointer hover:underline hover:underline-offset-4 hover:decoration-2 hover:decoration-sky-200 hover:text-sky-400 ${isCurrentDay ? 'text-bold text-sky-400 underline underline-offset-4 decoration-2 decoration-sky-200' : ''}`}
+              className={`relative cursor-pointer hover:underline hover:underline-offset-4 hover:decoration-2 hover:decoration-sky-200 hover:text-sky-400 ${isCurrentDay ? 'text-bold text-sky-400 underline underline-offset-4 decoration-2 decoration-sky-200' : ''}`}
             >
               {i}
+              <div className="absolute top-0 left-14">
+                <CheckSVG width={10} height={10} />
+              </div>
             </div>
           </a>
         );
