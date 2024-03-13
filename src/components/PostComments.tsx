@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 const giscusThemes = {
   light: 'https://giscus.app/themes/noborder_light.css',
@@ -19,7 +19,7 @@ export const changeGiscusTheme = (theme: keyof typeof giscusThemes) => {
   });
 };
 
-export const GiscusSection = () => {
+const GiscusSection = () => {
   useEffect(() => {
     const theme: keyof typeof giscusThemes = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
 
@@ -47,3 +47,5 @@ export const GiscusSection = () => {
 
   return <section style={{ minHeight: '372px' }} id="giscus"></section>;
 };
+
+export default GiscusSection;

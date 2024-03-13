@@ -1,0 +1,36 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Calender from '../../components/Calender';
+
+export async function getStaticPaths() {
+    const posts = (await getCollection('memory'));
+    return posts.map((post) => ({ params: { slug: post.slug }, props: { posts, currentPost: posts[0] } }));
+}
+
+type Props = { posts: CollectionEntry<'memory'>, currentPost: CollectionEntry<'memory'> };
+
+const { posts, currentPost } = Astro.props;
+const { Content } = await currentPost.render();
+
+const [year, month, day] = new Date().toLocaleDateString('en-us', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+}).replace(/(\d+)\/(\d+)\/(\d+)/, '$3.$1.$2').split('.').map(Number);
+
+---
+
+<BaseLayout
+    title="Memory"
+    description="Embark on a journey of personal insights and experiences through my blog"
+    image={{ src: '/dante-preview.jpg', alt: 'The preview of the site' }}
+    showHeader={false}
+>
+    <div class="grid grid-cols-2 gap-10">
+        <Calender posts={posts} currentYear={year} currentMonth={month} currentDay={day} />
+        <div class="mdx max-w-none prose prose-dante pt-5">
+            <Content />
+        </div>
+    </div>
+</BaseLayout>

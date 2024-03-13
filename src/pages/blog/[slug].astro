@@ -4,7 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import { sortItemsByDateDesc } from '../../utils/data-utils';
 import TitlePreview from '../../components/TitlePreview.astro';
-import { GiscusSection } from '../../components/PostComments';
+import GiscusSection from '../../components/PostComments';
 
 export async function getStaticPaths() {
     const posts = (await getCollection('blog')).sort(sortItemsByDateDesc);

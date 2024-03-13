@@ -55,3 +55,20 @@
 .mdx p:has(+ :where(ul, ol)) {
   @apply mb-2;
 }
+
+.mdx > .contains-task-list {
+  margin-top: 24px;
+  padding-left: 0px;
+  list-style-position: outside;
+  list-style-type: none;
+}
+
+.mdx .task-list-item .contains-task-list {
+  padding-left: 16px;
+  list-style-position: outside;
+  list-style-type: none;
+}
+
+.mdx input {
+  margin: 0 0.5rem 0 0;
+}

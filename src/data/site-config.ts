@@ -51,6 +51,10 @@ const siteConfig: SiteConfig = {
     {
       text: '글',
       href: '/blog'
+    },
+    {
+      text: '기록',
+      href: '/memory'
     }
   ],
   hero: {
