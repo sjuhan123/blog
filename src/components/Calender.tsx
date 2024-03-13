@@ -61,6 +61,7 @@ const Calendar = ({
     for (let i = 1; i <= totalDays; i++) {
       const isCurrentDay = i === day && month === currentMonth && year === currentYear;
       const isPosted = datesPosted.some((date) => date.year === year && date.month === month && date.day === i);
+      console.log('i', i, 'isCurrentDay', isCurrentDay, 'isPosted', isPosted);
 
       if (isPosted) {
         days.push(
@@ -70,7 +71,7 @@ const Calendar = ({
               className={`relative cursor-pointer hover:underline hover:underline-offset-4 hover:decoration-2 hover:decoration-sky-200 hover:text-sky-400 ${isCurrentDay ? 'text-bold text-sky-400 underline underline-offset-4 decoration-2 decoration-sky-200' : ''}`}
             >
               {i}
-              <div className="absolute top-0 left-14">
+              <div className="absolute top-0 left-4">
                 <CheckSVG width={10} height={10} />
               </div>
             </div>
