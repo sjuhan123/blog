@@ -128,7 +128,7 @@ const Calendar = ({
         </div>
         <div className="flex flex-col items-center gap-2">
           <span className="ml-4 underline underline-offset-4 decoration-2 decoration-sky-200">{totalDaysPosted} 일</span>
-          <a href="#" className="ml-2 hover:text-sky-400">
+          <a href="https://github.com/sjuhan123/habit-morning" className="ml-2 hover:text-sky-400">
             <GithubSVG width={20} height={20} />
           </a>
         </div>
