@@ -61,7 +61,6 @@ const Calendar = ({
     for (let i = 1; i <= totalDays; i++) {
       const isCurrentDay = i === day && month === currentMonth && year === currentYear;
       const isPosted = datesPosted.some((date) => date.year === year && date.month === month && date.day === i);
-      console.log('i', i, 'isCurrentDay', isCurrentDay, 'isPosted', isPosted);
 
       if (isPosted) {
         days.push(

@@ -3,21 +3,28 @@ import { type CollectionEntry, getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Calender from '../../components/Calender';
 
+
 export async function getStaticPaths() {
     const posts = (await getCollection('memory'));
-    return posts.map((post) => ({ params: { slug: post.slug }, props: { posts, currentPost: posts[0] } }));
+    const [year, month, day] = new Date().toLocaleDateString('en-us', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+    }).replace(/(\d+)\/(\d+)\/(\d+)/, '$3.$1.$2').split('.').map(Number);
+
+    const currentPost = posts.find((post) => {
+        const date = new Date(post.slug);
+        return date.getFullYear() === year && date.getMonth() + 1 === month && date.getDate() === day;
+    });
+    
+    return posts.map((post) => ({ params: { slug: post.slug }, props: { posts, currentPost, currentDate: { year, month, day } } }));
 }
 
-type Props = { posts: CollectionEntry<'memory'>, currentPost: CollectionEntry<'memory'> };
+type Props = { posts: CollectionEntry<'memory'>, currentPost: CollectionEntry<'memory'>, currentDate: { year: number, month: number, day: number } };
 
-const { posts, currentPost } = Astro.props;
+const { posts, currentPost, currentDate } = Astro.props;
+const { year, month, day } = currentDate;
 const { Content } = await currentPost.render();
-
-const [year, month, day] = new Date().toLocaleDateString('en-us', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-}).replace(/(\d+)\/(\d+)\/(\d+)/, '$3.$1.$2').split('.').map(Number);
 
 ---
 
