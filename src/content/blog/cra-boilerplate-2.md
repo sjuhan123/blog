@@ -10,7 +10,7 @@ seo:
     alt: 나만의 CLI 기반 CRA 제작기 2, 에러 대응
 ---
 
-[1편 - 나만의 CLI 기반 CRA 제작기 - 구현 및 배포](https://velog.io/@sjuhan123/%EB%82%98%EB%A7%8C%EC%9D%98-CLI-%EA%B8%B0%EB%B0%98-CRA-%EC%A0%9C%EC%9E%91%EA%B8%B0-1-%EA%B5%AC%ED%98%84-%EB%B0%8F-%EB%B0%B0%ED%8F%AC)
+[1편 - 나만의 CLI 기반 CRA 제작기 - 구현 및 배포](https://den-eight.vercel.app/blog/cra-boilerplate-1/)
 
 1편의 코드를 살펴보면, CommonJS Module 시스템을 사용하고 있다는 점을 확인할 수 있습니다. 이전 글에서는 언급하지 않았지만, 사실 프로젝트를 처음 구현할 때는 ES Module 시스템을 선택하여 시작했습니다. 그런데 구현 중 오류를 마주하게 되었고, 이에 대한 해결을 위해 시스템을 전환하게 되었습니다. 이번 포스팅에서는 이러한 전환의 배경과 이유에 대해 다뤄보겠습니다.
 
