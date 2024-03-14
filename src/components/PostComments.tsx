@@ -1,9 +1,5 @@
-import React, { useEffect } from 'react';
-
-const giscusThemes = {
-  light: 'https://giscus.app/themes/noborder_light.css',
-  dark: 'https://giscus.app/themes/noborder_gray.css'
-} as const;
+import { useEffect } from 'react';
+import { giscusThemes } from '../constants/giscus';
 
 export const changeGiscusTheme = (theme: keyof typeof giscusThemes) => {
   const sendMessage = (config: unknown) => {

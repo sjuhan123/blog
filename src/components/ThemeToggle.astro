@@ -8,7 +8,7 @@ import { Icon } from "astro-icon/components";
 </button>
 
 <script>
-    import { changeGiscusTheme } from "./PostComments";
+    import { changeGiscusTheme } from '../utils/giscus';
 
     document.addEventListener('astro:page-load', () => {
         const toggleButton = document.getElementById('theme-toggle');
