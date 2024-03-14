@@ -68,7 +68,7 @@ const Calendar = ({
           <a href={`/memory/${year}-${month < 10 ? `0${month}` : month}-${i}`} key={`next${i}`}>
             <div
               key={`curr${i}`}
-              className={`relative cursor-pointer hover:underline hover:underline-offset-4 hover:decoration-2 hover:decoration-sky-200 hover:text-sky-400 ${isCurrentDay ? 'text-bold text-sky-400 underline underline-offset-4 decoration-2 decoration-sky-200' : ''}`}
+              className={`relative cursor-pointer text-black hover:underline hover:underline-offset-4 hover:decoration-2 hover:decoration-sky-200 hover:text-sky-400 ${isCurrentDay ? 'text-bold text-sky-400 underline underline-offset-4 decoration-2 decoration-sky-200' : ''}`}
             >
               {i}
               <div className="absolute top-0 left-4">
@@ -81,7 +81,7 @@ const Calendar = ({
         days.push(
           <div
             key={`next${i}`}
-            className={`cursor-pointer hover:underline hover:underline-offset-4 hover:decoration-2 hover:decoration-sky-200 hover:text-sky-400 ${isCurrentDay ? 'text-bold text-sky-400 underline underline-offset-4 decoration-2 decoration-sky-200' : ''}`}
+            className={`cursor-pointer text-black hover:underline hover:underline-offset-4 hover:decoration-2 hover:decoration-sky-200 hover:text-sky-400 ${isCurrentDay ? 'text-bold text-sky-400 underline underline-offset-4 decoration-2 decoration-sky-200' : ''}`}
           >
             {i}
           </div>
@@ -104,11 +104,11 @@ const Calendar = ({
         <div className="grid grid-cols-2">
           <div className="grid grid-cols-2 justify-items-center">
             <span className="text-gray-400">Year</span>
-            <span className="underline underline-offset-4 decoration-2 decoration-sky-200">{year.toString().slice(2)}</span>
+            <span className="text-black underline underline-offset-4 decoration-2 decoration-sky-200">{year.toString().slice(2)}</span>
           </div>
           <div className="grid grid-cols-2 justify-items-center">
             <span className="text-gray-400">Month</span>
-            <span className="underline underline-offset-4 decoration-2 decoration-sky-200">{month < 10 ? `0${month}` : month}</span>
+            <span className="text-black underline underline-offset-4 decoration-2 decoration-sky-200">{month < 10 ? `0${month}` : month}</span>
           </div>
         </div>
         <div className="grid grid-cols-7 justify-items-center gap-2">
