@@ -3,9 +3,7 @@ import { type CollectionEntry, getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Notice from '../../components/Notice.astro';
 import Calender from '../../components/Calender';
-import type { Entries } from '../../types';
 import type { Date } from '../../types/date';
-import type { Post } from './type'
 
 export async function getStaticPaths() {
     const posts = (await getCollection('memory'));
@@ -20,7 +18,7 @@ export async function getStaticPaths() {
         return date.getFullYear() === year && date.getMonth() + 1 === month && date.getDate() === day;
     });
 
-    const postsInArray = Object.entries(posts) as unknown as Entries<Post>;
+    const postsInArray = Object.entries(posts);
 
     const totalPosts = postsInArray.length;
     const datesPosted = postsInArray.map(([_, { slug }]) => {
