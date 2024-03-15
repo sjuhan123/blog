@@ -1,8 +1,11 @@
 ---
 import { type CollectionEntry, getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Notice from '../../components/Notice.astro';
 import Calender from '../../components/Calender';
-
+import type { Entries } from '../../types';
+import type { Date } from '../../types/date';
+import type { Post } from './type'
 
 export async function getStaticPaths() {
     const posts = (await getCollection('memory'));
@@ -16,13 +19,21 @@ export async function getStaticPaths() {
         const date = new Date(post.slug);
         return date.getFullYear() === year && date.getMonth() + 1 === month && date.getDate() === day;
     });
-    
-    return posts.map((post) => ({ params: { slug: post.slug }, props: { posts, currentPost, currentDate: { year, month, day } } }));
+
+    const postsInArray = Object.entries(posts) as unknown as Entries<Post>;
+
+    const totalPosts = postsInArray.length;
+    const datesPosted = postsInArray.map(([_, { slug }]) => {
+        const [year, month, day] = slug.split('-');
+        return { year: parseInt(year), month: parseInt(month), day: parseInt(day) };
+    });
+
+    return posts.map((post) => ({ params: { slug: post.slug }, props: { posts, currentPost, totalPosts, datesPosted, currentDate: { year, month, day } } }));
 }
 
-type Props = { posts: CollectionEntry<'memory'>, currentPost: CollectionEntry<'memory'>, currentDate: { year: number, month: number, day: number } };
+type Props = { currentPost: CollectionEntry<'memory'>, totalPosts: number, datesPosted: Date[], currentDate: Date };
 
-const { posts, currentPost, currentDate } = Astro.props;
+const { currentPost, totalPosts, datesPosted, currentDate } = Astro.props;
 const { year, month, day } = currentDate;
 const { Content } = await currentPost.render();
 
@@ -34,10 +45,20 @@ const { Content } = await currentPost.render();
     image={{ src: '/dante-preview.jpg', alt: 'The preview of the site' }}
     showHeader={false}
 >
-    <div class="grid grid-cols-2 gap-10">
-        <Calender posts={posts} currentYear={year} currentMonth={month} currentDay={day} />
-        <div class="mdx max-w-none prose prose-dante pt-5">
-            <Content />
+    <div class="grid grid-cols-2 gap-6">
+        <div>
+            <div class="mb-1 text-sm text-gray-400">달력</div>
+            <Calender datesPosted={datesPosted} currentYear={year} currentMonth={month} currentDay={day} />
+        </div>
+        <div>
+            <div class="mb-1 text-sm text-gray-400">이번 달</div>
+            <Notice totalPosts={totalPosts} />
+        </div>
+        <div class="col-span-2">
+            <div class="mb-1 text-sm text-gray-400">{year}.{month < 10 ? `0${month}` : month}.{day}</div>
+            <div class="mdx max-w-none prose prose-dante p-7 rounded-lg bg-white shadow">
+                <Content />
+            </div>
         </div>
     </div>
 </BaseLayout>

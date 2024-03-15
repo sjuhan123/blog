@@ -1,18 +1,9 @@
-import { type CollectionEntry } from 'astro:content';
 import { useState } from 'react';
-import type { Entries } from '../types';
 import CheckSVG from './CheckSVG';
-import { GithubSVG } from './Github';
-
-type Post = {
-  id: {
-    id: string;
-    slug: string;
-  };
-};
+import type { Date } from '../types/date';
 
 interface Props {
-  posts: CollectionEntry<'memory'>;
+  datesPosted: Date[];
   currentYear?: number;
   currentMonth?: number;
   currentDay?: number;
@@ -22,7 +13,7 @@ interface Props {
 }
 
 const Calendar = ({
-  posts,
+  datesPosted,
   currentYear = new Date().getFullYear(),
   currentMonth = new Date().getMonth() + 1,
   currentDay = new Date().getDate(),
@@ -33,12 +24,6 @@ const Calendar = ({
   const [year, setYear] = useState(currentYear);
   const [month, setMonth] = useState(currentMonth);
   const [day, setDay] = useState(currentDay);
-
-  const datesPosted = (Object.entries(posts) as unknown as Entries<Post>).map(([_, { slug }]) => {
-    const [year, month, day] = slug.split('-');
-    return { year: parseInt(year), month: parseInt(month), day: parseInt(day) };
-  });
-  const totalDaysPosted = datesPosted.length;
 
   const daysInMonth = (year: number, month: number) => {
     return new Date(year, month, 0).getDate();
@@ -98,40 +83,26 @@ const Calendar = ({
   };
 
   return (
-    <section>
-      <div className="flex flex-col p-5 gap-7 rounded-2xl bg-white shadow">
-        <div className="grid grid-cols-2">
-          <div className="grid grid-cols-2 justify-items-center">
-            <span className="text-gray-400">Year</span>
-            <span className="text-black underline underline-offset-4 decoration-2 decoration-sky-200">{year.toString().slice(2)}</span>
-          </div>
-          <div className="grid grid-cols-2 justify-items-center">
-            <span className="text-gray-400">Month</span>
-            <span className="text-black underline underline-offset-4 decoration-2 decoration-sky-200">{month < 10 ? `0${month}` : month}</span>
-          </div>
+    <section className="flex flex-col p-5 gap-7 rounded-lg bg-white shadow h-[308px]">
+      <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 justify-items-center">
+          <span className="text-gray-400">Year</span>
+          <span className="text-black underline underline-offset-4 decoration-2 decoration-sky-200">{year.toString().slice(2)}</span>
         </div>
-        <div className="grid grid-cols-7 justify-items-center gap-2">
-          <div className="text-gray-400">Sun</div>
-          <div className="text-gray-400">Mon</div>
-          <div className="text-gray-400">Tue</div>
-          <div className="text-gray-400">Wed</div>
-          <div className="text-gray-400">Thu</div>
-          <div className="text-gray-400">Fri</div>
-          <div className="text-gray-400">Sat</div>
-          {renderCalendar()}
+        <div className="grid grid-cols-2 justify-items-center">
+          <span className="text-gray-400">Month</span>
+          <span className="text-black underline underline-offset-4 decoration-2 decoration-sky-200">{month < 10 ? `0${month}` : month}</span>
         </div>
       </div>
-      <div className="flex flex-row mt-6 pl-5">
-        <div className="flex flex-col justify-end gap-2">
-          <span className="text-sm">지금까지 기록한 날.</span>
-          <span className="text-sm">기존 기록 공간.</span>
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <span className="ml-4 underline underline-offset-4 decoration-2 decoration-sky-200">{totalDaysPosted} 일</span>
-          <a href="https://github.com/sjuhan123/habit-morning" className="ml-2 hover:text-sky-400">
-            <GithubSVG width={20} height={20} />
-          </a>
-        </div>
+      <div className="grid grid-cols-7 justify-items-center gap-2">
+        <div className="text-gray-400">Sun</div>
+        <div className="text-gray-400">Mon</div>
+        <div className="text-gray-400">Tue</div>
+        <div className="text-gray-400">Wed</div>
+        <div className="text-gray-400">Thu</div>
+        <div className="text-gray-400">Fri</div>
+        <div className="text-gray-400">Sat</div>
+        {renderCalendar()}
       </div>
     </section>
   );

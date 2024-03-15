@@ -1,20 +1,32 @@
 ---
 import { type CollectionEntry, getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Notice from '../../components/Notice.astro';
 import Calender from '../../components/Calender';
+import type { Entries } from '../../types';
+import type { Date } from '../../types/date';
+import type { Post } from './type'
 
 export async function getStaticPaths() {
     const posts = (await getCollection('memory'));
-    return posts.map((post) => ({ params: { slug: post.slug }, props: { posts, post } }));
+
+    const postsInArray = Object.entries(posts) as unknown as Entries<Post>;
+
+    const totalPosts = postsInArray.length;
+    const datesPosted = postsInArray.map(([_, { slug }]) => {
+        const [year, month, day] = slug.split('-');
+        return { year: parseInt(year), month: parseInt(month), day: parseInt(day) };
+    });
+
+    return posts.map((post) => ({ params: { slug: post.slug }, props: { posts, currentPost: post, totalPosts, datesPosted, currentPostDate: post.slug.toString().split('-').map(Number) } }));
 }
 
-type Props = { posts: CollectionEntry<'memory'>, post: CollectionEntry<'memory'> };
+type Props = { currentPost: CollectionEntry<'memory'>, totalPosts: number, datesPosted: Date[], currentPostDate: number[] };
 
-const { posts, post } = Astro.props;
-const { Content } = await post.render();
+const { currentPost, totalPosts, datesPosted, currentPostDate } = Astro.props;
+const { Content } = await currentPost.render();
 
-const { slug } = Astro.params;
-const [year, month, day] = slug.toString().split('-').map(Number);
+const [year, month, day] = currentPostDate;
 
 ---
 
@@ -24,10 +36,20 @@ const [year, month, day] = slug.toString().split('-').map(Number);
     image={{ src: '/dante-preview.jpg', alt: 'The preview of the site' }}
     showHeader={false}
 >
-    <div class="grid grid-cols-2 gap-10">
-        <Calender posts={posts} currentYear={year} currentMonth={month} currentDay={day} />
-        <div class="mdx max-w-none prose prose-dante pt-5">
-            <Content />
+    <div class="grid grid-cols-2 gap-6">
+        <div>
+            <div class="mb-1 text-sm text-gray-400">달력</div>
+            <Calender datesPosted={datesPosted} currentYear={year} currentMonth={month} currentDay={day} />
+        </div>
+        <div>
+            <div class="mb-1 text-sm text-gray-400">이번 달</div>
+            <Notice totalPosts={totalPosts} />
+        </div>
+        <div class="col-span-2">
+            <div class="mb-1 text-sm text-gray-400">{year}.{month < 10 ? `0${month}` : month}.{day}</div>
+            <div class="mdx max-w-none prose prose-dante p-7 rounded-lg bg-white shadow">
+                <Content />
+            </div>
         </div>
     </div>
 </BaseLayout>
