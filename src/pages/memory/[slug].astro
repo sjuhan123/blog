@@ -5,51 +5,73 @@ import Notice from '../../components/Notice.astro';
 import Calender from '../../components/Calender';
 import type { Entries } from '../../types';
 import type { Date } from '../../types/date';
-import type { Post } from './type'
+import type { Post } from './type';
 
 export async function getStaticPaths() {
-    const posts = (await getCollection('memory'));
+  const posts = await getCollection('memory');
 
-    const postsInArray = Object.entries(posts) as unknown as Entries<Post>;
+  const postsInArray = Object.entries(posts) as unknown as Entries<Post>;
 
-    const totalPosts = postsInArray.length;
-    const datesPosted = postsInArray.map(([_, { slug }]) => {
-        const [year, month, day] = slug.split('-');
-        return { year: parseInt(year), month: parseInt(month), day: parseInt(day) };
-    });
+  const totalPosts = postsInArray.length;
+  const datesPosted = postsInArray.map(([_, { slug }]) => {
+    const [year, month, day] = slug.split('-');
+    return { year: parseInt(year), month: parseInt(month), day: parseInt(day) };
+  });
 
-    return posts.map((post) => ({ params: { slug: post.slug }, props: { posts, currentPost: post, totalPosts, datesPosted, currentPostDate: post.slug.toString().split('-').map(Number) } }));
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: {
+      posts,
+      currentPost: post,
+      totalPosts,
+      datesPosted,
+      currentPostDate: post.slug.toString().split('-').map(Number),
+    },
+  }));
 }
 
-type Props = { currentPost: CollectionEntry<'memory'>, totalPosts: number, datesPosted: Date[], currentPostDate: number[] };
+type Props = {
+  currentPost: CollectionEntry<'memory'>;
+  totalPosts: number;
+  datesPosted: Date[];
+  currentPostDate: number[];
+};
 
 const { currentPost, totalPosts, datesPosted, currentPostDate } = Astro.props;
 const { Content } = await currentPost.render();
 
 const [year, month, day] = currentPostDate;
-
 ---
 
 <BaseLayout
-    title="Memory"
-    description="Embark on a journey of personal insights and experiences through my blog"
-    image={{ src: '/dante-preview.jpg', alt: 'The preview of the site' }}
-    showHeader={false}
+  title="Memory"
+  description="Embark on a journey of personal insights and experiences through my blog"
+  image={{ src: '/dante-preview.jpg', alt: 'The preview of the site' }}
+  showHeader={false}
 >
-    <div class="grid grid-cols-2 gap-6">
-        <div>
-            <div class="mb-1 text-sm text-gray-400">달력</div>
-            <Calender datesPosted={datesPosted} currentYear={year} currentMonth={month} currentDay={day} />
-        </div>
-        <div>
-            <div class="mb-1 text-sm text-gray-400">이번 달</div>
-            <Notice totalPosts={totalPosts} />
-        </div>
-        <div class="col-span-2">
-            <div class="mb-1 text-sm text-gray-400">{year}.{month < 10 ? `0${month}` : month}.{day}</div>
-            <div class="mdx max-w-none prose prose-dante p-7 rounded-lg bg-white shadow">
-                <Content />
-            </div>
-        </div>
+  <div class="grid grid-cols-2 gap-6">
+    <div>
+      <div class="mb-1 text-sm text-gray-400">달력</div>
+      <Calender
+        datesPosted={datesPosted}
+        currentYear={year}
+        currentMonth={month}
+        currentDay={day}
+      />
     </div>
+    <div>
+      <div class="mb-1 text-sm text-gray-400">이번 달</div>
+      <Notice totalPosts={totalPosts} />
+    </div>
+    <div class="col-span-2">
+      <div class="mb-1 text-sm text-gray-400">
+        {year}.{month < 10 ? `0${month}` : month}.{day}
+      </div>
+      <div
+        class="mdx prose prose-dante max-w-none rounded-lg bg-white p-7 shadow"
+      >
+        <Content />
+      </div>
+    </div>
+  </div>
 </BaseLayout>

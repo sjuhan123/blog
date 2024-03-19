@@ -1,56 +1,61 @@
 ---
-import { Icon } from "astro-icon/components";
-
+import { Icon } from 'astro-icon/components';
 ---
 
-<button id="theme-toggle" class="w-8 h-8 flex items-center justify-center" aria-label="Change color scheme">
-    <Icon name="line-md:moon-alt-to-sunny-outline-loop-transition" size={27} />
+<button
+  id="theme-toggle"
+  class="flex h-8 w-8 items-center justify-center"
+  aria-label="Change color scheme"
+>
+  <Icon name="line-md:moon-alt-to-sunny-outline-loop-transition" size={27} />
 </button>
 
 <script>
-    import { changeGiscusTheme } from '../utils/giscus';
+  import { changeGiscusTheme } from '../utils/giscus';
 
-    document.addEventListener('astro:page-load', () => {
-        const toggleButton = document.getElementById('theme-toggle');
+  document.addEventListener('astro:page-load', () => {
+    const toggleButton = document.getElementById('theme-toggle');
 
-        const theme = (() => {
-            if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-                return localStorage.getItem('theme') || 'light';
-            }
-            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                return 'dark';
-            }
-            return 'light';
-        })();
+    const theme = (() => {
+      if (
+        typeof localStorage !== 'undefined' &&
+        localStorage.getItem('theme')
+      ) {
+        return localStorage.getItem('theme') || 'light';
+      }
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+      return 'light';
+    })();
 
-        if (theme === 'light') {
-            document.documentElement.classList.remove('dark');
-        } else {
-            document.documentElement.classList.add('dark');
-        }
+    if (theme === 'light') {
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+    }
 
-        window.localStorage.setItem('theme', theme);
+    window.localStorage.setItem('theme', theme);
 
-        const handleToggleClick = () => {
-            const element = document.documentElement;
-            element.classList.toggle('dark');
+    const handleToggleClick = () => {
+      const element = document.documentElement;
+      element.classList.toggle('dark');
 
-            const isDark = element.classList.contains('dark');
-            const currentTheme = isDark ? 'dark' : 'light';    
-        
-            localStorage.setItem('theme', currentTheme);
-            changeGiscusTheme(currentTheme);
-        };
+      const isDark = element.classList.contains('dark');
+      const currentTheme = isDark ? 'dark' : 'light';
 
-        
-        toggleButton?.addEventListener('click', handleToggleClick);
-    });
+      localStorage.setItem('theme', currentTheme);
+      changeGiscusTheme(currentTheme);
+    };
+
+    toggleButton?.addEventListener('click', handleToggleClick);
+  });
 </script>
 
 <script>
-    document.addEventListener('astro:after-swap', () => {
-        if (localStorage.theme === 'dark') {
-            document.documentElement.classList.add('dark');
-        }
-    });
+  document.addEventListener('astro:after-swap', () => {
+    if (localStorage.theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+  });
 </script>

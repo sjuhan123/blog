@@ -223,7 +223,18 @@ npm 배포를 위해 필요한 내용들로 package.json을 구성했습니다. 
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["cli", "command", "line", "tool", "cra", "create", "react", "app", "custom", "custom-app"],
+  "keywords": [
+    "cli",
+    "command",
+    "line",
+    "tool",
+    "cra",
+    "create",
+    "react",
+    "app",
+    "custom",
+    "custom-app"
+  ],
   "homepage": "https://github.com/sjuhan123/create-custom-app",
   "bugs": {
     "url": "https://github.com/sjuhan123/create-custom-app",
@@ -318,7 +329,9 @@ if (projectName !== '.') {
   if (!fs.existsSync(projectPath)) {
     fs.mkdirSync(projectPath);
   } else {
-    console.log(`The folder ${chalk.red(folderName)} already exist in the current directory, please give it another name.`);
+    console.log(
+      `The folder ${chalk.red(folderName)} already exist in the current directory, please give it another name.`,
+    );
     process.exit(1);
   }
 }
@@ -352,26 +365,26 @@ inquirer.prompt([
     type: 'list',
     name: 'reactEnvironment',
     message: 'Select the react environment:',
-    choices: ['React + JavaScript', 'React + TypeScript']
+    choices: ['React + JavaScript', 'React + TypeScript'],
   },
   {
     type: 'list',
     name: 'useReactRouterDom',
     message: 'Use React Router Dom?',
-    choices: ['Yes', 'No']
+    choices: ['Yes', 'No'],
   },
   {
     type: 'list',
     name: 'styleLibrary',
     message: 'Select a style library:',
-    choices: ['styled-components', 'emotion', 'none']
+    choices: ['styled-components', 'emotion', 'none'],
   },
   {
     type: 'list',
     name: 'usePrettierEslint',
     message: 'Use Prettier and ESLint?',
-    choices: ['Yes', 'No']
-  }
+    choices: ['Yes', 'No'],
+  },
 ]);
 ```
 
@@ -484,14 +497,18 @@ packageJson.scripts = {
   start: 'react-scripts start',
   build: 'react-scripts build',
   test: 'react-scripts test',
-  eject: 'react-scripts eject'
+  eject: 'react-scripts eject',
 };
 packageJson.eslintConfig = {
-  extends: ['react-app']
+  extends: ['react-app'],
 };
 packageJson.browserslist = {
   production: ['>0.2%', 'not dead', 'not op_mini all'],
-  development: ['last 1 chrome version', 'last 1 firefox version', 'last 1 safari version']
+  development: [
+    'last 1 chrome version',
+    'last 1 firefox version',
+    'last 1 safari version',
+  ],
 };
 
 fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));

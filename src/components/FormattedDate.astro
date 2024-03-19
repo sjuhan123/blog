@@ -5,11 +5,13 @@ const { date } = Astro.props;
 ---
 
 <time datetime={date.toISOString()} class="text-sm">
-    {
-        date.toLocaleDateString('en-us', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-        }).replace(/(\d+)\/(\d+)\/(\d+)/, '$3.$1.$2')
-    }
+  {
+    date
+      .toLocaleDateString('en-us', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      })
+      .replace(/(\d+)\/(\d+)\/(\d+)/, '$3.$1.$2')
+  }
 </time>

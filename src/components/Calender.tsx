@@ -19,7 +19,7 @@ const Calendar = ({
   currentDay = new Date().getDate(),
   onYearChange,
   onMonthChange,
-  onDayChange
+  onDayChange,
 }: Props) => {
   const [year, setYear] = useState(currentYear);
   const [month, setMonth] = useState(currentMonth);
@@ -44,31 +44,37 @@ const Calendar = ({
     }
 
     for (let i = 1; i <= totalDays; i++) {
-      const isCurrentDay = i === day && month === currentMonth && year === currentYear;
-      const isPosted = datesPosted.some((date) => date.year === year && date.month === month && date.day === i);
+      const isCurrentDay =
+        i === day && month === currentMonth && year === currentYear;
+      const isPosted = datesPosted.some(
+        (date) => date.year === year && date.month === month && date.day === i,
+      );
 
       if (isPosted) {
         days.push(
-          <a href={`/memory/${year}-${month < 10 ? `0${month}` : month}-${i}`} key={`next${i}`}>
+          <a
+            href={`/memory/${year}-${month < 10 ? `0${month}` : month}-${i}`}
+            key={`next${i}`}
+          >
             <div
               key={`curr${i}`}
-              className={`relative cursor-pointer text-black hover:underline hover:underline-offset-4 hover:decoration-2 hover:decoration-sky-200 hover:text-sky-400 ${isCurrentDay ? 'text-bold text-sky-400 underline underline-offset-4 decoration-2 decoration-sky-200' : ''}`}
+              className={`relative cursor-pointer text-black hover:text-sky-400 hover:underline hover:decoration-sky-200 hover:decoration-2 hover:underline-offset-4 ${isCurrentDay ? 'text-bold text-sky-400 underline decoration-sky-200 decoration-2 underline-offset-4' : ''}`}
             >
               {i}
-              <div className="absolute top-0 left-4">
+              <div className="absolute left-4 top-0">
                 <CheckSVG width={10} height={10} />
               </div>
             </div>
-          </a>
+          </a>,
         );
       } else {
         days.push(
           <div
             key={`next${i}`}
-            className={`cursor-pointer text-black hover:underline hover:underline-offset-4 hover:decoration-2 hover:decoration-sky-200 hover:text-sky-400 ${isCurrentDay ? 'text-bold text-sky-400 underline underline-offset-4 decoration-2 decoration-sky-200' : ''}`}
+            className={`cursor-pointer text-black hover:text-sky-400 hover:underline hover:decoration-sky-200 hover:decoration-2 hover:underline-offset-4 ${isCurrentDay ? 'text-bold text-sky-400 underline decoration-sky-200 decoration-2 underline-offset-4' : ''}`}
           >
             {i}
-          </div>
+          </div>,
         );
       }
     }
@@ -83,15 +89,19 @@ const Calendar = ({
   };
 
   return (
-    <section className="flex flex-col p-5 gap-7 rounded-lg bg-white shadow h-[308px]">
+    <section className="flex h-[308px] flex-col gap-7 rounded-lg bg-white p-5 shadow">
       <div className="grid grid-cols-2">
         <div className="grid grid-cols-2 justify-items-center">
           <span className="text-gray-400">Year</span>
-          <span className="text-black underline underline-offset-4 decoration-2 decoration-sky-200">{year.toString().slice(2)}</span>
+          <span className="text-black underline decoration-sky-200 decoration-2 underline-offset-4">
+            {year.toString().slice(2)}
+          </span>
         </div>
         <div className="grid grid-cols-2 justify-items-center">
           <span className="text-gray-400">Month</span>
-          <span className="text-black underline underline-offset-4 decoration-2 decoration-sky-200">{month < 10 ? `0${month}` : month}</span>
+          <span className="text-black underline decoration-sky-200 decoration-2 underline-offset-4">
+            {month < 10 ? `0${month}` : month}
+          </span>
         </div>
       </div>
       <div className="grid grid-cols-7 justify-items-center gap-2">

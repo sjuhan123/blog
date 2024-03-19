@@ -6,57 +6,87 @@ import Calender from '../../components/Calender';
 import type { Date } from '../../types/date';
 
 export async function getStaticPaths() {
-    const posts = (await getCollection('memory'));
-    const [year, month, day] = new Date().toLocaleDateString('en-us', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-    }).replace(/(\d+)\/(\d+)\/(\d+)/, '$3.$1.$2').split('.').map(Number);
+  const posts = await getCollection('memory');
+  const [year, month, day] = new Date()
+    .toLocaleDateString('en-us', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    })
+    .replace(/(\d+)\/(\d+)\/(\d+)/, '$3.$1.$2')
+    .split('.')
+    .map(Number);
 
-    const currentPost = posts.find((post) => {
-        const date = new Date(post.slug);
-        return date.getFullYear() === year && date.getMonth() + 1 === month && date.getDate() === day;
-    });
+  const currentPost = posts.find((post) => {
+    const date = new Date(post.slug);
+    return (
+      date.getFullYear() === year &&
+      date.getMonth() + 1 === month &&
+      date.getDate() === day
+    );
+  });
 
-    const postsInArray = Object.entries(posts);
+  const postsInArray = Object.entries(posts);
 
-    const totalPosts = postsInArray.length;
-    const datesPosted = postsInArray.map(([_, { slug }]) => {
-        const [year, month, day] = slug.split('-');
-        return { year: parseInt(year), month: parseInt(month), day: parseInt(day) };
-    });
+  const totalPosts = postsInArray.length;
+  const datesPosted = postsInArray.map(([_, { slug }]) => {
+    const [year, month, day] = slug.split('-');
+    return { year: parseInt(year), month: parseInt(month), day: parseInt(day) };
+  });
 
-    return posts.map((post) => ({ params: { slug: post.slug }, props: { posts, currentPost, totalPosts, datesPosted, currentDate: { year, month, day } } }));
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: {
+      posts,
+      currentPost,
+      totalPosts,
+      datesPosted,
+      currentDate: { year, month, day },
+    },
+  }));
 }
 
-type Props = { currentPost: CollectionEntry<'memory'>, totalPosts: number, datesPosted: Date[], currentDate: Date };
+type Props = {
+  currentPost: CollectionEntry<'memory'>;
+  totalPosts: number;
+  datesPosted: Date[];
+  currentDate: Date;
+};
 
 const { currentPost, totalPosts, datesPosted, currentDate } = Astro.props;
 const { year, month, day } = currentDate;
 const { Content } = await currentPost.render();
-
 ---
 
 <BaseLayout
-    title="Memory"
-    description="Embark on a journey of personal insights and experiences through my blog"
-    image={{ src: '/dante-preview.jpg', alt: 'The preview of the site' }}
-    showHeader={false}
+  title="Memory"
+  description="Embark on a journey of personal insights and experiences through my blog"
+  image={{ src: '/dante-preview.jpg', alt: 'The preview of the site' }}
+  showHeader={false}
 >
-    <div class="grid grid-cols-2 gap-6">
-        <div>
-            <div class="mb-1 text-sm text-gray-400">달력</div>
-            <Calender datesPosted={datesPosted} currentYear={year} currentMonth={month} currentDay={day} />
-        </div>
-        <div>
-            <div class="mb-1 text-sm text-gray-400">이번 달</div>
-            <Notice totalPosts={totalPosts} />
-        </div>
-        <div class="col-span-2">
-            <div class="mb-1 text-sm text-gray-400">{year}.{month < 10 ? `0${month}` : month}.{day}</div>
-            <div class="mdx max-w-none prose prose-dante p-7 rounded-lg bg-white shadow">
-                <Content />
-            </div>
-        </div>
+  <div class="grid grid-cols-2 gap-6">
+    <div>
+      <div class="mb-1 text-sm text-gray-400">달력</div>
+      <Calender
+        datesPosted={datesPosted}
+        currentYear={year}
+        currentMonth={month}
+        currentDay={day}
+      />
     </div>
+    <div>
+      <div class="mb-1 text-sm text-gray-400">이번 달</div>
+      <Notice totalPosts={totalPosts} />
+    </div>
+    <div class="col-span-2">
+      <div class="mb-1 text-sm text-gray-400">
+        {year}.{month < 10 ? `0${month}` : month}.{day}
+      </div>
+      <div
+        class="mdx prose prose-dante max-w-none rounded-lg bg-white p-7 shadow"
+      >
+        <Content />
+      </div>
+    </div>
+  </div>
 </BaseLayout>

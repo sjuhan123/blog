@@ -3,21 +3,27 @@ import { giscusThemes } from '../constants/giscus';
 
 export const changeGiscusTheme = (theme: keyof typeof giscusThemes) => {
   const sendMessage = (config: unknown) => {
-    const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
+    const iframe = document.querySelector<HTMLIFrameElement>(
+      'iframe.giscus-frame',
+    );
 
-    iframe?.contentWindow?.postMessage({ giscus: config }, 'https://giscus.app');
+    iframe?.contentWindow?.postMessage(
+      { giscus: config },
+      'https://giscus.app',
+    );
   };
 
   sendMessage({
     setConfig: {
-      theme: giscusThemes[theme]
-    }
+      theme: giscusThemes[theme],
+    },
   });
 };
 
 const GiscusSection = () => {
   useEffect(() => {
-    const theme: keyof typeof giscusThemes = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    const theme: keyof typeof giscusThemes =
+      document.documentElement.classList.contains('dark') ? 'dark' : 'light';
 
     const giscusAttributes = {
       src: 'https://giscus.app/client.js',
@@ -33,11 +39,13 @@ const GiscusSection = () => {
       'data-lang': 'ko',
       'data-theme': giscusThemes[theme],
       crossorigin: 'anonymous',
-      async: ''
+      async: '',
     };
 
     const giscusScript = document.createElement('script');
-    Object.entries(giscusAttributes).forEach(([key, value]) => giscusScript.setAttribute(key, value));
+    Object.entries(giscusAttributes).forEach(([key, value]) =>
+      giscusScript.setAttribute(key, value),
+    );
     document.querySelector('#giscus')?.appendChild(giscusScript);
   }, []);
 

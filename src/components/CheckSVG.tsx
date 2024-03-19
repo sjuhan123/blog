@@ -2,7 +2,13 @@ import type { SVGProps } from 'react';
 
 function CheckSVG(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="1.2rem" height="1.2rem" viewBox="0 0 128 128" {...props}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="1.2rem"
+      height="1.2rem"
+      viewBox="0 0 128 128"
+      {...props}
+    >
       <path
         fill="#40c0e7"
         stroke="#40c0e7"

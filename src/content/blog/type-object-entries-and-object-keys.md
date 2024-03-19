@@ -18,8 +18,8 @@ const post = {
   status: true,
   data: {
     date: '2021-01-01',
-    content: '오늘 글의 주제는 Object.entries()와 Object.keys()'
-  }
+    content: '오늘 글의 주제는 Object.entries()와 Object.keys()',
+  },
 } as const;
 ```
 
@@ -86,7 +86,7 @@ type Entries<T> = {
 }[keyof T][];
 
 const posts = (Object.entries(post) as Entries<typeof post>).map(
-  ([key, value]) => [key, value]
+  ([key, value]) => [key, value],
   // ^? (parameter) key: "id" | "status" | "data"
 );
 ```
@@ -133,7 +133,7 @@ function entriesFromObject<T extends object>(object: T): Entries<T> {
 }
 
 const posts = entriesFromObject(post).map(
-  ([key, value]) => [key, value]
+  ([key, value]) => [key, value],
   // ^? (parameter) key: "id" | "status" | "data"
 );
 ```

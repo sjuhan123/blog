@@ -1,17 +1,25 @@
 import { type CollectionEntry } from 'astro:content';
 import { slugify } from './common-utils';
 
-export function sortItemsByDateDesc(itemA: CollectionEntry<'blog'>, itemB: CollectionEntry<'blog'>) {
-  return new Date(itemB.data.publishDate).getTime() - new Date(itemA.data.publishDate).getTime();
+export function sortItemsByDateDesc(
+  itemA: CollectionEntry<'blog'>,
+  itemB: CollectionEntry<'blog'>,
+) {
+  return (
+    new Date(itemB.data.publishDate).getTime() -
+    new Date(itemA.data.publishDate).getTime()
+  );
 }
 
 export function getAllTags(posts: CollectionEntry<'blog'>[]) {
-  const tags: string[] = [...new Set(posts.flatMap((post) => post.data.tags || []).filter(Boolean))];
+  const tags: string[] = [
+    ...new Set(posts.flatMap((post) => post.data.tags || []).filter(Boolean)),
+  ];
   return tags
     .map((tag) => {
       return {
         name: tag,
-        slug: slugify(tag)
+        slug: slugify(tag),
       };
     })
     .filter((obj, pos, arr) => {
@@ -19,7 +27,14 @@ export function getAllTags(posts: CollectionEntry<'blog'>[]) {
     });
 }
 
-export function getPostsByTag(posts: CollectionEntry<'blog'>[], tagSlug: string) {
-  const filteredPosts: CollectionEntry<'blog'>[] = posts.filter((post) => post.data.tags.map((tag: string | undefined) => slugify(tag)).includes(tagSlug));
+export function getPostsByTag(
+  posts: CollectionEntry<'blog'>[],
+  tagSlug: string,
+) {
+  const filteredPosts: CollectionEntry<'blog'>[] = posts.filter((post) =>
+    post.data.tags
+      .map((tag: string | undefined) => slugify(tag))
+      .includes(tagSlug),
+  );
   return filteredPosts;
 }

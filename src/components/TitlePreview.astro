@@ -1,18 +1,29 @@
 ---
 import { type CollectionEntry } from 'astro:content';
 
-type Props = { post: CollectionEntry<'blog'>; class?: 'items-start' | 'items-end'; direction?: 'prev' | 'next'};
+type Props = {
+  post: CollectionEntry<'blog'>;
+  class?: 'items-start' | 'items-end';
+  direction?: 'prev' | 'next';
+};
 
-const { post, class: className = 'items-start', direction = 'prev' } = Astro.props;
+const {
+  post,
+  class: className = 'items-start',
+  direction = 'prev',
+} = Astro.props;
 const { title } = post.data;
-
 ---
 
-<a class:list={['flex flex-col gap-1 group hover:underline hover:underline-offset-4 hover:decoration-2 hover:decoration-sky-200', className]} href={`/blog/${post.slug}/`}>
-    <p class="text-sm text-gray-400">{
-        direction === 'prev'
-            ? 'Previous'
-            : 'Next'
-    }</p>
-    <p class="text-sm">{title}</p>
+<a
+  class:list={[
+    'group flex flex-col gap-1 hover:underline hover:decoration-sky-200 hover:decoration-2 hover:underline-offset-4',
+    className,
+  ]}
+  href={`/blog/${post.slug}/`}
+>
+  <p class="text-sm text-gray-400">
+    {direction === 'prev' ? 'Previous' : 'Next'}
+  </p>
+  <p class="text-sm">{title}</p>
 </a>

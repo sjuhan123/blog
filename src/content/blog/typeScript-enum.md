@@ -42,7 +42,7 @@ enum Team {
   Manager, // 0
   Planner, // 1
   Developer, // 2
-  Designer // 3
+  Designer, // 3
 }
 
 let sarha: number = Team.Designer;

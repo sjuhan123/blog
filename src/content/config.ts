@@ -6,10 +6,10 @@ const seoSchema = z.object({
   image: z
     .object({
       src: z.string(),
-      alt: z.string().optional()
+      alt: z.string().optional(),
     })
     .optional(),
-  pageType: z.enum(['website', 'article']).default('website')
+  pageType: z.enum(['website', 'article']).default('website'),
 });
 
 const blog = defineCollection({
@@ -19,8 +19,8 @@ const blog = defineCollection({
     publishDate: z.coerce.date(),
     isFeatured: z.boolean().default(false),
     tags: z.array(z.string()).default([]),
-    seo: seoSchema.optional()
-  })
+    seo: seoSchema.optional(),
+  }),
 });
 
 const memory = defineCollection({
@@ -29,8 +29,8 @@ const memory = defineCollection({
     publishDate: z.coerce.date(),
     isFeatured: z.boolean().default(false),
     tags: z.array(z.string()).default([]),
-    seo: seoSchema.optional()
-  })
+    seo: seoSchema.optional(),
+  }),
 });
 
 export const collections = { blog, memory };

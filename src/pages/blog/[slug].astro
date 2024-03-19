@@ -7,67 +7,85 @@ import TitlePreview from '../../components/TitlePreview.astro';
 import GiscusSection from '../../components/PostComments';
 
 export async function getStaticPaths() {
-    const posts = (await getCollection('blog')).sort(sortItemsByDateDesc);
-    const postCount = posts.length;
-    return posts.map((post, index) => ({
-        params: { slug: post.slug },
-        props: {
-            post,
-            prevPost: index + 1 !== postCount ? posts[index + 1] : null,
-            nextPost: index !== 0 ? posts[index - 1] : null
-        }
-    }));
+  const posts = (await getCollection('blog')).sort(sortItemsByDateDesc);
+  const postCount = posts.length;
+  return posts.map((post, index) => ({
+    params: { slug: post.slug },
+    props: {
+      post,
+      prevPost: index + 1 !== postCount ? posts[index + 1] : null,
+      nextPost: index !== 0 ? posts[index - 1] : null,
+    },
+  }));
 }
 
-type Props = { post: CollectionEntry<'blog'>; prevPost: CollectionEntry<'blog'>; nextPost: CollectionEntry<'blog'> };
+type Props = {
+  post: CollectionEntry<'blog'>;
+  prevPost: CollectionEntry<'blog'>;
+  nextPost: CollectionEntry<'blog'>;
+};
 
 const { post, prevPost, nextPost } = Astro.props;
 const { title, publishDate, excerpt, seo } = post.data;
 const { Content } = await post.render();
 ---
 
-<BaseLayout title={seo?.title ?? title} description={seo?.description ?? excerpt} image={seo?.image} pageType="article" showHeader={false}>
-    <article class="mb-10">
-        <header class="mb-10">
-            <h1 class="text-3xl leading-tight font-serif font-medium">{title}</h1>
-            <div class="mt-2 text-sm">
-                <FormattedDate date={publishDate} />
-            </div>
-        </header>
-        <div class="mdx max-w-none prose prose-dante">
-            <Content />
-        </div>
-        <hr />
-    </article>
-    {
-        (prevPost || nextPost) && (
-            <div class="flex justify-between mb-10">
-                {prevPost ? <TitlePreview post={prevPost} class="items-start" direction='prev' /> : <div></div>}
-                {nextPost && <TitlePreview post={nextPost} class="items-end" direction='next' />}
-            </div>
-        )
-    }
-    <GiscusSection client:load />
+<BaseLayout
+  title={seo?.title ?? title}
+  description={seo?.description ?? excerpt}
+  image={seo?.image}
+  pageType="article"
+  showHeader={false}
+>
+  <article class="mb-10">
+    <header class="mb-10">
+      <h1 class="font-serif text-3xl font-medium leading-tight">{title}</h1>
+      <div class="mt-2 text-sm">
+        <FormattedDate date={publishDate} />
+      </div>
+    </header>
+    <div class="mdx prose prose-dante max-w-none">
+      <Content />
+    </div>
+    <hr />
+  </article>
+  {
+    (prevPost || nextPost) && (
+      <div class="mb-10 flex justify-between">
+        {prevPost ? (
+          <TitlePreview post={prevPost} class="items-start" direction="prev" />
+        ) : (
+          <div />
+        )}
+        {nextPost && (
+          <TitlePreview post={nextPost} class="items-end" direction="next" />
+        )}
+      </div>
+    )
+  }
+  <GiscusSection client:load />
 </BaseLayout>
 
 <script>
-    document.addEventListener('astro:page-load', () => {
-        const copyUrlButton = document.querySelector('.copy-url-button') as HTMLButtonElement;
-        copyUrlButton?.addEventListener('click', async () => {
-            await copyUrl(copyUrlButton);
-        });
-
-        async function copyUrl(button: HTMLButtonElement) {
-            let url = button.getAttribute('data-url') || '';
-            let label = button.innerText;
-
-            await navigator.clipboard.writeText(url);
-
-            button.innerText = 'Copied';
-
-            setTimeout(() => {
-                button.innerText = label;
-            }, 2500);
-        }
+  document.addEventListener('astro:page-load', () => {
+    const copyUrlButton = document.querySelector(
+      '.copy-url-button',
+    ) as HTMLButtonElement;
+    copyUrlButton?.addEventListener('click', async () => {
+      await copyUrl(copyUrlButton);
     });
+
+    async function copyUrl(button: HTMLButtonElement) {
+      let url = button.getAttribute('data-url') || '';
+      let label = button.innerText;
+
+      await navigator.clipboard.writeText(url);
+
+      button.innerText = 'Copied';
+
+      setTimeout(() => {
+        button.innerText = label;
+      }, 2500);
+    }
+  });
 </script>

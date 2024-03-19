@@ -1,6 +1,8 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
-import BaseHead, { type Props as HeadProps } from '../components/BaseHead.astro';
+import BaseHead, {
+  type Props as HeadProps,
+} from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Nav from '../components/Nav.astro';
 
@@ -10,25 +12,25 @@ const { showHeader = true, ...head } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="antialiased break-words">
-    <head>
-        <BaseHead {...head} />
-        <script>
-            if (localStorage.theme === 'dark') {
-                document.documentElement.classList.add('dark');
-            }
-        </script>
-        <ViewTransitions />
-    </head>
-    <body class="bg-main text-main">
-        <div class="flex flex-col min-h-screen px-4 md:px-14">
-            <div class="ml-auto mr-auto max-w-2xl w-full pt-16 pb-16">
-                <Nav />
-                {showHeader && <Header />}
-                <main class="grow w-full max-w-3xl mx-auto">
-                    <slot />
-                </main>
-            </div>  
-        </div>
-    </body>
+<html lang="en" class="break-words antialiased">
+  <head>
+    <BaseHead {...head} />
+    <script>
+      if (localStorage.theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
+    <ViewTransitions />
+  </head>
+  <body class="bg-main text-main">
+    <div class="flex min-h-screen flex-col px-4 md:px-14">
+      <div class="ml-auto mr-auto w-full max-w-2xl pb-16 pt-16">
+        <Nav />
+        {showHeader && <Header />}
+        <main class="mx-auto w-full max-w-3xl grow">
+          <slot />
+        </main>
+      </div>
+    </div>
+  </body>
 </html>

@@ -4,63 +4,76 @@ import { type CollectionEntry, getCollection } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import PostPreview from '../../../components/PostPreview.astro';
 import siteConfig from '../../../data/site-config';
-import { sortItemsByDateDesc, getAllTags, getPostsByTag } from '../../../utils/data-utils';
+import {
+  sortItemsByDateDesc,
+  getAllTags,
+  getPostsByTag,
+} from '../../../utils/data-utils';
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-    const posts = (await getCollection('blog')).sort(sortItemsByDateDesc);
-    const tags = getAllTags(posts);
+  const posts = (await getCollection('blog')).sort(sortItemsByDateDesc);
+  const tags = getAllTags(posts);
 
-    return tags.flatMap((tag) => {
-        const filteredPosts = getPostsByTag(posts, tag.slug);
-        return paginate(filteredPosts, {
-            params: { slug: tag.slug },
-            pageSize: siteConfig.postsPerPage || 4
-        });
+  return tags.flatMap((tag) => {
+    const filteredPosts = getPostsByTag(posts, tag.slug);
+    return paginate(filteredPosts, {
+      params: { slug: tag.slug },
+      pageSize: siteConfig.postsPerPage || 4,
     });
+  });
 }
 
 type Props = { page: Page<CollectionEntry<'blog'>> };
 
-
 const allPosts = await getCollection('blog');
 const tags = getAllTags(allPosts).sort((tagA, tagB) => {
-    const postCountTagA = getPostsByTag(allPosts, tagA.slug).length;
-    const postCountTagB = getPostsByTag(allPosts, tagB.slug).length;
-    return postCountTagB - postCountTagA;
+  const postCountTagA = getPostsByTag(allPosts, tagA.slug).length;
+  const postCountTagB = getPostsByTag(allPosts, tagB.slug).length;
+  return postCountTagB - postCountTagA;
 });
 
 const { page } = Astro.props;
 const blog = page.data;
 const params = Astro.params;
 const currentTag = tags.find((tag) => {
-    return tag.slug === params.slug;
+  return tag.slug === params.slug;
 });
-
 ---
 
 <BaseLayout
-    title="Blog"
-    description={`Explore a curated collection of blog posts under ${currentTag?.name}`}
-    image={{ src: '/dante-preview.jpg', alt: 'The preview of the site' }}
-    showHeader={false}
+  title="Blog"
+  description={`Explore a curated collection of blog posts under ${currentTag?.name}`}
+  image={{ src: '/dante-preview.jpg', alt: 'The preview of the site' }}
+  showHeader={false}
 >
-    <div class="flex mb-12 sm:mb-12 gap-6">
-        <a class="flex items-center gap-2" href="/blog">
-            <p class="text-sm leading-tight font-serif font-medium">
-                전체 {allPosts.length}
+  <div class="mb-12 flex gap-6 sm:mb-12">
+    <a class="flex items-center gap-2" href="/blog">
+      <p class="font-serif text-sm font-medium leading-tight">
+        전체 {allPosts.length}
+      </p>
+    </a>
+    {
+      tags.map((tag) => {
+        const postCount = getPostsByTag(allPosts, tag.slug).length;
+        const isActive = tag.slug === currentTag?.slug;
+        return (
+          <a
+            class:list={[
+              'flex items-center gap-2 hover:underline hover:decoration-sky-200 hover:decoration-2 hover:underline-offset-4',
+              {
+                'underline decoration-sky-200 decoration-2 underline-offset-4':
+                  isActive,
+              },
+            ]}
+            href={`/blog/${tag.slug}`}
+          >
+            <p class="font-serif text-sm font-medium leading-tight md:text-base">
+              {tag.name} {postCount}
             </p>
-        </a>
-        {tags.map((tag) => {
-            const postCount = getPostsByTag(allPosts, tag.slug).length;
-            const isActive = tag.slug === currentTag?.slug;
-            return (
-                <a class:list={["flex items-center gap-2 hover:underline hover:underline-offset-4 hover:decoration-2 hover:decoration-sky-200", { 'underline underline-offset-4 decoration-2 decoration-sky-200': isActive }]} href={`/blog/${tag.slug}`}>
-                    <p class="text-sm leading-tight font-serif font-medium md:text-base">
-                        {tag.name} {postCount}
-                    </p>
-                </a>
-            );
-        })}
-    </div>
-    {blog.map((post) => <PostPreview post={post} class="mb-10 sm:mb-12" />)}
+          </a>
+        );
+      })
+    }
+  </div>
+  {blog.map((post) => <PostPreview post={post} class="mb-10 sm:mb-12" />)}
 </BaseLayout>
