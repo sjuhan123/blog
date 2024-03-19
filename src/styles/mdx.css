@@ -78,3 +78,15 @@
 .mdx input {
   margin: 0 0.5rem 0 0;
 }
+
+.mdx .anchor {
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.mdx .anchor:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-decoration-color: #bae6fd;
+  text-decoration-style: dashed;
+}
