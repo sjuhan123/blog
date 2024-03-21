@@ -4,18 +4,18 @@ module.exports = {
   theme: {
     fontFamily: {
       sans: ['Spoqa Han Sans Neo,sans-serif'],
-      serif: ['Spoqa Han Sans Neo,sans-serif']
+      serif: ['Spoqa Han Sans Neo,sans-serif'],
     },
     extend: {
       textColor: {
-        main: 'rgb(var(--color-text-main) / <alpha-value>)'
+        main: 'rgb(var(--color-text-main) / <alpha-value>)',
       },
       backgroundColor: {
         main: 'rgb(var(--color-bg-main) / <alpha-value>)',
-        muted: 'rgb(var(--color-bg-muted) / <alpha-value>)'
+        muted: 'rgb(var(--color-bg-muted) / <alpha-value>)',
       },
       borderColor: {
-        main: 'rgb(var(--color-border-main) / <alpha-value>)'
+        main: 'rgb(var(--color-border-main) / <alpha-value>)',
       },
       typography: (theme) => ({
         dante: {
@@ -36,8 +36,8 @@ module.exports = {
             '--tw-prose-pre-code': theme('colors.zinc.100'),
             '--tw-prose-pre-bg': theme('colors.zinc.800'),
             '--tw-prose-th-borders': theme('borderColor.main / 100%'),
-            '--tw-prose-td-borders': theme('borderColor.main / 100%')
-          }
+            '--tw-prose-td-borders': theme('borderColor.main / 100%'),
+          },
         },
         DEFAULT: {
           css: {
@@ -49,29 +49,29 @@ module.exports = {
               textDecorationColor: 'hsla(0, 0%, 0%, .09)',
               textUnderlineOffset: '4px',
               '&:hover': {
-                textDecorationStyle: 'solid'
-              }
+                textDecorationStyle: 'solid',
+              },
             },
             'h1,h2,h3': {
               fontFamily: theme('fontFamily.serif'),
               fontWeight: '600',
-              margin: '5rem 0 1.75rem'
+              margin: '5rem 0 1.75rem',
             },
             h1: {
               fontSize: '22px',
-              lineHeight: '1.2'
+              lineHeight: '1.2',
             },
             h2: {
               fontSize: '20px',
-              lineHeight: '1.2'
+              lineHeight: '1.2',
             },
             h3: {
               fontSize: '18px',
-              lineHeight: '1.2'
+              lineHeight: '1.2',
             },
             p: {
               fontSize: '16px',
-              margin: '0 0 1.75rem 0'
+              margin: '0 0 1.75rem 0',
             },
             blockquote: {
               borderLeft: '2px solid',
@@ -81,30 +81,30 @@ module.exports = {
               fontSize: '1.3125rem',
               fontWeight: 'normal',
               fontStyle: 'normal',
-              lineHeight: 1.75
-            }
+              lineHeight: 1.75,
+            },
           },
           ol: {
             listStyleType: 'decimal',
-            listStylePosition: 'outside'
+            listStylePosition: 'outside',
           },
           ul: {
             listStyleType: 'disc',
-            listStylePosition: 'outside'
+            listStylePosition: 'outside',
           },
           li: {
-            margin: '7px 0 0 0'
-          }
+            margin: '7px 0 0 0',
+          },
         },
         lg: {
           css: {
             blockquote: {
-              paddingLeft: 0
-            }
-          }
-        }
-      })
-    }
+              paddingLeft: 0,
+            },
+          },
+        },
+      }),
+    },
   },
-  plugins: [require('@tailwindcss/typography')]
+  plugins: [require('@tailwindcss/typography')],
 };
