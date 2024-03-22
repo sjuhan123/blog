@@ -11,7 +11,6 @@ interface Props {
   onMonthChange?: (change: number) => void;
   onDayChange?: (change: number) => void;
 }
-
 const Calendar = ({
   datesPosted,
   currentYear = new Date().getFullYear(),
@@ -25,67 +24,26 @@ const Calendar = ({
   const [month, setMonth] = useState(currentMonth);
   const [day, setDay] = useState(currentDay);
 
-  const daysInMonth = (year: number, month: number) => {
-    return new Date(year, month, 0).getDate();
+  const handleYearChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let newYear = parseInt(event.target.value);
+
+    if (newYear < 2023 && newYear > 1000) {
+      newYear = 2023;
+    } else if (newYear > 2025) {
+      newYear = 2025;
+    }
+    setYear(newYear);
   };
 
-  const firstDayOfWeek = (year: number, month: number) => {
-    return new Date(year, month - 1, 1).getDay();
-  };
+  const handleMonthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let newMonth = parseInt(event.target.value);
 
-  const renderCalendar = () => {
-    const totalDays = daysInMonth(year, month);
-    const startingDay = firstDayOfWeek(year, month);
-
-    let days = [];
-
-    for (let i = 0; i < startingDay; i++) {
-      days.push(<div key={`prev${i}`} className="other-month" />);
+    if (newMonth < 1) {
+      newMonth = 1;
+    } else if (newMonth > 12) {
+      newMonth = 12;
     }
-
-    for (let i = 1; i <= totalDays; i++) {
-      const isCurrentDay =
-        i === day && month === currentMonth && year === currentYear;
-      const isPosted = datesPosted.some(
-        (date) => date.year === year && date.month === month && date.day === i,
-      );
-
-      if (isPosted) {
-        days.push(
-          <a
-            href={`/memory/${year}-${month < 10 ? `0${month}` : month}-${i}`}
-            key={`next${i}`}
-          >
-            <div
-              key={`curr${i}`}
-              className={`relative cursor-pointer text-black hover:text-sky-400 hover:underline hover:decoration-sky-200 hover:decoration-2 hover:underline-offset-4 ${isCurrentDay ? 'text-bold text-sky-400 underline decoration-sky-200 decoration-2 underline-offset-4' : ''}`}
-            >
-              {i}
-              <div className="absolute left-4 top-0">
-                <CheckSVG width={10} height={10} />
-              </div>
-            </div>
-          </a>,
-        );
-      } else {
-        days.push(
-          <div
-            key={`next${i}`}
-            className={`cursor-pointer text-black hover:text-sky-400 hover:underline hover:decoration-sky-200 hover:decoration-2 hover:underline-offset-4 ${isCurrentDay ? 'text-bold text-sky-400 underline decoration-sky-200 decoration-2 underline-offset-4' : ''}`}
-          >
-            {i}
-          </div>,
-        );
-      }
-    }
-
-    const nextMonthDays = days.length % 7 === 0 ? 0 : 7 - (days.length % 7);
-
-    for (let i = 0; i < nextMonthDays; i++) {
-      days.push(<div key={`next${i}`} className="other-month" />);
-    }
-
-    return days;
+    setMonth(newMonth);
   };
 
   return (
@@ -93,29 +51,112 @@ const Calendar = ({
       <div className="grid grid-cols-2">
         <div className="grid grid-cols-2 justify-items-center">
           <span className="text-gray-400">Year</span>
-          <span className="text-black underline decoration-sky-200 decoration-2 underline-offset-4">
-            {year.toString().slice(2)}
-          </span>
+          <input
+            type="number"
+            value={year}
+            onChange={handleYearChange}
+            className="flex w-full text-center text-black underline decoration-sky-200 decoration-2 underline-offset-4 focus:outline-none"
+            min={2023}
+            max={2025}
+          />
         </div>
         <div className="grid grid-cols-2 justify-items-center">
           <span className="text-gray-400">Month</span>
-          <span className="text-black underline decoration-sky-200 decoration-2 underline-offset-4">
-            {month < 10 ? `0${month}` : month}
-          </span>
+          <input
+            type="number"
+            value={month}
+            onChange={handleMonthChange}
+            className="flex w-full text-center text-black underline decoration-sky-200 decoration-2 underline-offset-4 focus:outline-none"
+            min={1}
+            max={12}
+          />
         </div>
       </div>
       <div className="grid grid-cols-7 justify-items-center gap-2">
-        <div className="text-gray-400">Sun</div>
-        <div className="text-gray-400">Mon</div>
-        <div className="text-gray-400">Tue</div>
-        <div className="text-gray-400">Wed</div>
-        <div className="text-gray-400">Thu</div>
-        <div className="text-gray-400">Fri</div>
-        <div className="text-gray-400">Sat</div>
-        {renderCalendar()}
+        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((dayName) => (
+          <div key={`day-${dayName}`} className="text-gray-400">
+            {dayName}
+          </div>
+        ))}
+        {renderCalendar(
+          year,
+          month,
+          day,
+          datesPosted,
+          currentYear,
+          currentMonth,
+        )}
       </div>
     </section>
   );
 };
 
 export default Calendar;
+
+const renderCalendar = (
+  year: number,
+  month: number,
+  day: number,
+  datesPosted: Date[],
+  currentYear: number,
+  currentMonth: number,
+) => {
+  const totalDays = daysInMonth(year, month);
+  const startingDay = firstDayOfWeek(year, month);
+
+  const prevMonthDays = Array.from({ length: startingDay }, (_, i) => (
+    <div key={`prev${i}`} className="other-month" />
+  ));
+
+  const currentMonthDays = Array.from({ length: totalDays }, (_, i) => {
+    const dayNumber = i + 1;
+
+    const isPosted = datesPosted.some(
+      (date) =>
+        date.year === year && date.month === month && date.day === dayNumber,
+    );
+
+    const isCurrentDay =
+      dayNumber === day && month === currentMonth && year === currentYear;
+
+    const dayClassName = `relative cursor-pointer text-black hover:text-sky-400 hover:underline hover:decoration-sky-200 hover:decoration-2 hover:underline-offset-4 ${
+      isCurrentDay
+        ? 'text-bold text-sky-400 ㄴunderline decoration-sky-200 decoration-2 underline-offset-4'
+        : ''
+    }`;
+
+    return (
+      <div key={`day-${dayNumber}`} className={dayClassName}>
+        {isPosted ? (
+          <a
+            href={`/memory/${year}-${month < 10 ? `0${month}` : month}-${dayNumber}`}
+          >
+            {dayNumber}
+            <div className="absolute left-4 top-0">
+              <CheckSVG width={10} height={10} />
+            </div>
+          </a>
+        ) : (
+          dayNumber
+        )}
+      </div>
+    );
+  });
+
+  const nextMonthDaysCount =
+    (7 - ((prevMonthDays.length + currentMonthDays.length) % 7)) % 7;
+
+  const nextMonthDays = Array.from({ length: nextMonthDaysCount }, (_, i) => (
+    <div key={`next${i}`} className="other-month" />
+  ));
+
+  return [...prevMonthDays, ...currentMonthDays, ...nextMonthDays];
+};
+
+const daysInMonth = (year: number, month: number) => {
+  return new Date(year, month, 0).getDate();
+};
+
+const firstDayOfWeek = (year: number, month: number) => {
+  return new Date(year, month - 1, 1).getDay();
+};
