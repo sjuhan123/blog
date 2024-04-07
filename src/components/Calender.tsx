@@ -129,7 +129,7 @@ const renderCalendar = (
       <div key={`day-${dayNumber}`} className={dayClassName}>
         {isPosted ? (
           <a
-            href={`/memory/${year}-${month < 10 ? `0${month}` : month}-${dayNumber}`}
+            href={`/memory/${year}-${month < 10 ? `0${month}` : month}-${dayNumber < 10 ? `0${dayNumber}` : dayNumber}`}
           >
             {dayNumber}
             <div className="absolute left-4 top-0">
