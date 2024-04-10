@@ -65,27 +65,3 @@ const { Content } = await post.render();
   }
   <GiscusSection client:load />
 </BaseLayout>
-
-<script>
-  document.addEventListener('astro:page-load', () => {
-    const copyUrlButton = document.querySelector(
-      '.copy-url-button',
-    ) as HTMLButtonElement;
-    copyUrlButton?.addEventListener('click', async () => {
-      await copyUrl(copyUrlButton);
-    });
-
-    async function copyUrl(button: HTMLButtonElement) {
-      let url = button.getAttribute('data-url') || '';
-      let label = button.innerText;
-
-      await navigator.clipboard.writeText(url);
-
-      button.innerText = 'Copied';
-
-      setTimeout(() => {
-        button.innerText = label;
-      }, 2500);
-    }
-  });
-</script>
