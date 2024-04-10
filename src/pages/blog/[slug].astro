@@ -49,6 +49,20 @@ const { Content } = await post.render();
     </div>
     <hr />
   </article>
+  <div class="mb-5 flex justify-end gap-4">
+    <a
+      href="/"
+      class="text-sm hover:underline hover:decoration-sky-200 hover:decoration-2 hover:underline-offset-4"
+    >
+      홈
+    </a>
+    <a
+      href="/blog"
+      class="text-sm hover:underline hover:decoration-sky-200 hover:decoration-2 hover:underline-offset-4"
+    >
+      목록
+    </a>
+  </div>
   {
     (prevPost || nextPost) && (
       <div class="mb-10 flex justify-between">
