@@ -41,7 +41,7 @@ release-client-app.yml workflow trigger
 -> docker run
 ```
 
-모노레포 환경으로 인해 더욱 복잡해진 배포 flow에 적용한 환경변수 주입 방식을 정리하겠습니다.
+모노레포 환경으로 인해 더욱 복잡해진 배포 flow에 적용한 환경변수 주입 방식을 정리해보겠습니다.
 
 ## Github Secrets 이용 방식
 
