@@ -10,10 +10,10 @@ seo:
     alt: Github Actions, Docker 사용시 Vite 환경변수 주입받기
 ---
 
-환경변수 주입 방법에 대해서 설명하기 이전에, 현재 프로젝트 구조랑 배포 Flow 간단하게 설명하겠습니다.
+환경변수 주입 방법에 대해 설명하기 이전에, 먼저 현재 프로젝트 구조랑 배포 Flow에 대해서 간단하게 설명드리겠습니다.
 
 ```bash
-// yarn berry workspace
+// yarn berry workspace 모노레포 환경
 
 📦root
  ┣ 📂 .github
@@ -28,10 +28,10 @@ seo:
  ┃ ... 기타 프로젝트 config
 ```
 
-main 브랜치에 Pull Request Merge가 되면, 변경사항이 있는 프로젝트가 아래의 순서로 배포가 됩니다.
+위와 같은 구조로 구성되어 있는 main 브랜치에 Pull Request Merge가 되면, 변경사항이 있는 프로젝트(`client` 프로젝트가 변경되면 `client` 프로젝트 배포 시작)가 아래의 순서로 배포가 됩니다.
 
 ```bash
-release-client-app.yml workflow trigger \
+release-client-app.yml workflow trigger
 -> docker build
 -> vite build
 -> docker run
@@ -41,15 +41,16 @@ release-client-app.yml workflow trigger \
 -> docker run
 ```
 
-이 상황에서 적용한 환경변수 주입 방식을 정리하겠습니다.
+모노레포 환경으로 인해 더욱 복잡해진 배포 flow에 적용한 환경변수 주입 방식을 정리하겠습니다.
 
 ## Github Secrets 이용 방식
 
 Github Actions에서 제공하는 Secrets를 이용해서 환경변수를 주입받는 방법입니다.
 
 ```
-// Actions 등록
+// Github Actions 등록
 VITE_KAKAO_API_KEY=YOUR_KAKAO_API_KEY
+... 기타 생략 ...
 ```
 
 우선 Vite에 주입해줄 환경변수를 Github Secrets에 등록합니다. VITE 환경변수 형식은 `VITE_`로 시작해서 동일한게 등록하겠습니다.
@@ -122,9 +123,11 @@ RUN yarn install --immutable \
 
 이렇게 동적으로 주입받은 환경변수는, VITE 프로젝트 내에서 `import.meta.env.VITE_`로 사용할 수 있게 됩니다.
 
-한 가지 주의할 점은, 위에서 설명드린 과정을 적용할 때 각 프로젝트 환경에 맞게 환경변수 주입을 언제 해줄지 고민해봐야 합니다. 변수가 동적으로 주입되기 때문에, 잘못된 시점에 환경변수 로직이 실행되면 의도와 다르게 주입이 되지 않을 수 있습니다.
+한 가지 주의할 점은, 위에서 설명드린 과정을 적용할 때 각 프로젝트 환경에 맞게 환경변수 주입을 **언제 해줄지** 고민해봐야 합니다. 변수가 동적으로 주입되기 때문에, 잘못된 시점에 환경변수 로직이 실행되면 의도와 다르게 주입이 되지 않을 수 있습니다.
 
-추가로 ec2 cli를 활용해 ec2에 접속해서 실행된 image 내에 환경변수가 잘 주입되었는지 확인해보기 위해서 시도했지만 확인이 되지 않아 혹시 아시는 분은 댓글로 알려주시면 감사하겠습니다.(혹시 방법을 알아내면 다시 업데이트 하겠습니다.)
+## 마치며
+
+ec2 docker image에 주입한 환경변수가 잘 주입되었는지 확인해보고 싶었습니다. 그래서 여러가지 ec2 cli 명령어로 확인해봤지만, 확인이 되지 않아 혹시 확인 방법을 아시는 분이 계시다면 댓글로 알려주시면 감사하겠습니다.(추후에 방법을 알아내면 다시 업데이트 하겠습니다.)
 
 ```bash
 // ec2 cli
