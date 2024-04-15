@@ -28,7 +28,7 @@ seo:
  ┃ ... 기타 프로젝트 config
 ```
 
-위와 같은 구조로 구성되어 있는 main 브랜치에 Pull Request Merge가 되면, 변경사항이 있는 프로젝트(`client` 프로젝트가 변경되면 `client` 프로젝트 배포 시작)가 아래의 순서로 배포가 됩니다.
+위와 같은 구조로 구성되어 있는 main 브랜치에 Pull Request Merge가 되면, 변경사항이 있는 프로젝트(`client` 프로젝트가 변경되면 `client` 프로젝트 배포 시작)가 크게 보면 아래의 순서로 배포가 됩니다.
 
 ```bash
 release-client-app.yml workflow trigger
@@ -41,7 +41,7 @@ release-client-app.yml workflow trigger
 -> docker run
 ```
 
-모노레포 환경으로 인해 더욱 복잡해진 배포 flow에 적용한 환경변수 주입 방식을 정리해보겠습니다.
+모노레포 환경을 구축하고 나서 더욱 복잡해진 배포 flow에 적용한 환경변수 주입 방식을 정리해보겠습니다.
 
 ## Github Secrets 이용 방식
 
