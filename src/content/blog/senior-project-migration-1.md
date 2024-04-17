@@ -65,7 +65,7 @@ docker run -d -p 80:80 [프로젝트 이름]
 
 ## 그래서 앞으로의 계획은?
 
-우선 목표를 정했습니다.
+일단 목표를 정했습니다.
 
 1. 공통 모듈 관리하는 프로젝트를 만든다.
 2. 수동 작업을 최소화하고, 자동화 환경을 구축한다.
@@ -118,7 +118,51 @@ docker run -d -p 80:80 [프로젝트 이름]
 
 ### 수동 작업을 최소화하고, 자동화 환경을 구축한다.
 
-우선 기존에 React 프로젝트 빌드 결과물을 서버 프로젝트 루트 디렉토리에 넣어서 단일 docker image를 ec2에서 실행하는 방식을 변경해야 합니다. 그리고 로컬에서 수동으로 배포 작업을 했던 전 과정을 아래의 방식들을 적용해서 자동화할 예정입니다.
+기존에는 Vite + React 프로젝트를 서버 프로젝트의 루트 디렉토리에 빌드하고, 서버 프로젝트를 단일 docker image에 Copy하고 node를 실행했습니다. 그리고 로컬에서 수동으로 실행한 docker image를 ec2에서 pull하고 실행하는 방식으로 배포를 진행했습니다.
+
+````js
+// 기존 vite.config.js
+export default defineConfig({
+  ... 생략 ...
+  build: {
+    manifest: true,
+    outDir: "../server/public", // 빌드 결과물을 서버 프로젝트 루트 디렉토리에 저장
+    rollupOptions: {
+      input: {
+        main: './index.html',
+      },
+    },
+  },
+});
+```
+
+```bash
+// 기존 Dockerfile
+FROM node:lts-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+
+COPY client/package*.json client/
+RUN npm run install-client --omit=dev
+
+COPY server/package*.json server/
+RUN npm run install-server --omit=dev
+
+COPY client/ client/
+RUN npm run build --prefix client
+
+COPY server/ server/
+
+USER node
+
+CMD [ "npm", "start", "--prefix", "server"]
+
+EXPOSE 8000
+````
+
+이렇게 로컬에서 수동으로 배포했던 작업들을 아래의 방식들을 적용해서 자동화할 예정입니다.
 
 1. Github Actions를 사용해서 CD 환경을 구축한다.
 2. Github Actions에서 ec2에 접속할 수 있는 방식을 결정하고 적용한다.
