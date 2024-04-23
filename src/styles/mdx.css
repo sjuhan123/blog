@@ -1,9 +1,3 @@
-.mdx p,
-.mdx li,
-.mdx strong {
-  color: black;
-}
-
 .mdx > * {
   margin-bottom: 1.75rem;
 }
