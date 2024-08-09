@@ -3,7 +3,7 @@ title: 회고 그리고 앞으로의 계획
 excerpt: 3개월 동안 게을러진 나를 반성하며
 publishDate: 'Aug 09 2024'
 tags:
-  - 회고
+  - retrospective
 seo:
   image:
     src: '/post-2.jpg'
