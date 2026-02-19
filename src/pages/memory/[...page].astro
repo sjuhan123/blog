@@ -7,48 +7,37 @@ import type { Date } from '../../types/date';
 
 export async function getStaticPaths() {
   const posts = await getCollection('memory');
-  const [year, month, day] = new Date()
-    .toLocaleDateString('en-us', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    })
-    .replace(/(\d+)\/(\d+)\/(\d+)/, '$3.$1.$2')
-    .split('.')
-    .map(Number);
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
+  const day = today.getDate();
 
   const currentPost = posts.find((post) => {
-    const date = new Date(post.slug);
-
-    return (
-      date.getFullYear() === year &&
-      date.getMonth() + 1 === month &&
-      date.getDate() === day
-    );
+    const [postYear, postMonth, postDay] = post.slug.split('-').map(Number);
+    return postYear === year && postMonth === month && postDay === day;
   });
 
-  const postsInArray = Object.entries(posts);
-
-  const totalPosts = postsInArray.length;
-  const datesPosted = postsInArray.map(([_, { slug }]) => {
+  const totalPosts = posts.length;
+  const datesPosted = posts.map(({ slug }) => {
     const [year, month, day] = slug.split('-');
     return { year: parseInt(year), month: parseInt(month), day: parseInt(day) };
   });
 
-  return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: {
-      posts,
-      currentPost,
-      totalPosts,
-      datesPosted,
-      currentDate: { year, month, day },
+  return [
+    {
+      params: { page: undefined },
+      props: {
+        currentPost,
+        totalPosts,
+        datesPosted,
+        currentDate: { year, month, day },
+      },
     },
-  }));
+  ];
 }
 
 type Props = {
-  currentPost: CollectionEntry<'memory'>;
+  currentPost: CollectionEntry<'memory'> | undefined;
   totalPosts: number;
   datesPosted: Date[];
   currentDate: Date;
@@ -56,7 +45,7 @@ type Props = {
 
 const { currentPost, totalPosts, datesPosted, currentDate } = Astro.props;
 const { year, month, day } = currentDate;
-const { Content } = await currentPost.render();
+const Content = currentPost ? (await currentPost.render()).Content : null;
 ---
 
 <BaseLayout
@@ -65,7 +54,7 @@ const { Content } = await currentPost.render();
   image={{ src: '/dante-preview.jpg', alt: 'The preview of the site' }}
   showHeader={false}
 >
-  <div class="flex flex-col gap-6 sm:grid sm:grid-cols-2">
+  <div class="grid grid-cols-2 gap-6 sm:grid sm:grid-cols-2">
     <div>
       <div class="mb-1 text-sm text-gray-400">달력</div>
       <Calender
@@ -77,18 +66,20 @@ const { Content } = await currentPost.render();
       />
     </div>
     <div>
-      <div class="mb-1 text-sm text-gray-400">이번 달</div>
-      <Notice totalPosts={totalPosts} />
+      <div class="mb-1 text-sm text-gray-400">기록</div>
+      <Notice totalPosts={totalPosts} year={year} month={month} />
     </div>
-    <div class="col-span-2">
-      <div class="mb-1 text-sm text-gray-400">
-        {year}.{month < 10 ? `0${month}` : month}.{day}
+    {Content && (
+      <div class="col-span-2">
+        <div class="mb-1 text-sm text-gray-400">
+          {year}.{month < 10 ? `0${month}` : month}.{day}
+        </div>
+        <div
+          class="mdx prose prose-dante max-w-none rounded-lg bg-white p-7 shadow"
+        >
+          <Content />
+        </div>
       </div>
-      <div
-        class="mdx prose prose-dante max-w-none rounded-lg bg-white p-7 shadow"
-      >
-        <Content />
-      </div>
-    </div>
+    )}
   </div>
 </BaseLayout>

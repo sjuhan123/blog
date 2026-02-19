@@ -1,9 +1,9 @@
 ---
 import { GithubSVG } from './Github';
 
-type Props = { totalPosts: number };
+type Props = { totalPosts: number; year: number; month: number };
 
-const { totalPosts } = Astro.props;
+const { totalPosts, year, month } = Astro.props;
 ---
 
 <section class="flex h-[308px] flex-col gap-11 rounded-lg bg-white p-5 shadow">
@@ -29,7 +29,7 @@ const { totalPosts } = Astro.props;
     </div>
   </div>
   <div>
-    <span class="text-gray-400">목표</span>
+    <span class="text-gray-400">{year}년 {month}월 목표</span>
     <div class="mt-7 flex flex-row">
       <div class="flex flex-col justify-end gap-2 text-black">
         <span class="text-sm">기본 다지기와 Next.js 프로젝트</span>

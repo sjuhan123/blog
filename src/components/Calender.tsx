@@ -7,36 +7,31 @@ interface Props {
   currentYear?: number;
   currentMonth?: number;
   currentDay?: number;
-  onYearChange?: (change: number) => void;
-  onMonthChange?: (change: number) => void;
-  onDayChange?: (change: number) => void;
 }
 const Calendar = ({
   datesPosted,
   currentYear = new Date().getFullYear(),
   currentMonth = new Date().getMonth() + 1,
   currentDay = new Date().getDate(),
-  onYearChange,
-  onMonthChange,
-  onDayChange,
 }: Props) => {
   const [year, setYear] = useState(currentYear);
   const [month, setMonth] = useState(currentMonth);
-  const [day, setDay] = useState(currentDay);
 
   const handleYearChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let newYear = parseInt(event.target.value);
+    if (isNaN(newYear)) return;
 
-    if (newYear < 2023 && newYear > 1000) {
+    if (newYear < 2023) {
       newYear = 2023;
-    } else if (newYear > 2025) {
-      newYear = 2025;
+    } else if (newYear > new Date().getFullYear()) {
+      newYear = new Date().getFullYear();
     }
     setYear(newYear);
   };
 
   const handleMonthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let newMonth = parseInt(event.target.value);
+    if (isNaN(newMonth)) return;
 
     if (newMonth < 1) {
       newMonth = 1;
@@ -57,7 +52,7 @@ const Calendar = ({
             onChange={handleYearChange}
             className="flex w-full text-center text-black underline decoration-sky-200 decoration-2 underline-offset-4 focus:outline-none"
             min={2023}
-            max={2025}
+            max={new Date().getFullYear()}
           />
         </div>
         <div className="grid grid-cols-2 justify-items-center">
@@ -81,7 +76,7 @@ const Calendar = ({
         {renderCalendar(
           year,
           month,
-          day,
+          currentDay,
           datesPosted,
           currentYear,
           currentMonth,
@@ -121,7 +116,7 @@ const renderCalendar = (
 
     const dayClassName = `relative cursor-pointer text-black hover:text-sky-400 hover:underline hover:decoration-sky-200 hover:decoration-2 hover:underline-offset-4 ${
       isCurrentDay
-        ? 'text-bold text-sky-400 ㄴunderline decoration-sky-200 decoration-2 underline-offset-4'
+        ? 'font-bold text-sky-400 underline decoration-sky-200 decoration-2 underline-offset-4'
         : ''
     }`;
 

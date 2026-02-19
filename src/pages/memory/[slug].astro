@@ -3,17 +3,13 @@ import { type CollectionEntry, getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Notice from '../../components/Notice.astro';
 import Calender from '../../components/Calender';
-import type { Entries } from '../../types';
 import type { Date } from '../../types/date';
-import type { Post } from './type';
 
 export async function getStaticPaths() {
   const posts = await getCollection('memory');
 
-  const postsInArray = Object.entries(posts) as unknown as Entries<Post>;
-
-  const totalPosts = postsInArray.length;
-  const datesPosted = postsInArray.map(([_, { slug }]) => {
+  const totalPosts = posts.length;
+  const datesPosted = posts.map(({ slug }) => {
     const [year, month, day] = slug.split('-');
     return { year: parseInt(year), month: parseInt(month), day: parseInt(day) };
   });
@@ -21,7 +17,6 @@ export async function getStaticPaths() {
   return posts.map((post) => ({
     params: { slug: post.slug },
     props: {
-      posts,
       currentPost: post,
       totalPosts,
       datesPosted,
@@ -61,8 +56,8 @@ const [year, month, day] = currentPostDate;
       />
     </div>
     <div>
-      <div class="mb-1 text-sm text-gray-400">이번 달</div>
-      <Notice totalPosts={totalPosts} />
+      <div class="mb-1 text-sm text-gray-400">기록</div>
+      <Notice totalPosts={totalPosts} year={year} month={month} />
     </div>
     <div class="col-span-2">
       <div class="mb-1 text-sm text-gray-400">
