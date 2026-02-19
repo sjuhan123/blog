@@ -1,21 +1,11 @@
 ---
 import { type CollectionEntry, getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Notice from '../../components/Notice.astro';
-import Calender from '../../components/Calender';
+import MemoryPanel from '../../components/MemoryPanel';
 import type { Date } from '../../types/date';
 
 export async function getStaticPaths() {
   const posts = await getCollection('memory');
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth() + 1;
-  const day = today.getDate();
-
-  const currentPost = posts.find((post) => {
-    const [postYear, postMonth, postDay] = post.slug.split('-').map(Number);
-    return postYear === year && postMonth === month && postDay === day;
-  });
 
   const totalPosts = posts.length;
   const datesPosted = posts.map(({ slug }) => {
@@ -27,25 +17,25 @@ export async function getStaticPaths() {
     {
       params: { page: undefined },
       props: {
-        currentPost,
         totalPosts,
         datesPosted,
-        currentDate: { year, month, day },
       },
     },
   ];
 }
 
 type Props = {
-  currentPost: CollectionEntry<'memory'> | undefined;
   totalPosts: number;
   datesPosted: Date[];
-  currentDate: Date;
 };
 
-const { currentPost, totalPosts, datesPosted, currentDate } = Astro.props;
-const { year, month, day } = currentDate;
-const Content = currentPost ? (await currentPost.render()).Content : null;
+const { totalPosts, datesPosted } = Astro.props;
+
+// Build-time fallback values; corrected to the real today by client script
+const buildDate = new Date();
+const buildYear = buildDate.getFullYear();
+const buildMonth = buildDate.getMonth() + 1;
+const buildDay = buildDate.getDate();
 ---
 
 <BaseLayout
@@ -54,32 +44,39 @@ const Content = currentPost ? (await currentPost.render()).Content : null;
   image={{ src: '/dante-preview.jpg', alt: 'The preview of the site' }}
   showHeader={false}
 >
-  <div class="grid grid-cols-2 gap-6 sm:grid sm:grid-cols-2">
-    <div>
-      <div class="mb-1 text-sm text-gray-400">달력</div>
-      <Calender
-        datesPosted={datesPosted}
-        currentYear={year}
-        currentMonth={month}
-        currentDay={day}
-        client:load
-      />
-    </div>
-    <div>
-      <div class="mb-1 text-sm text-gray-400">기록</div>
-      <Notice totalPosts={totalPosts} year={year} month={month} />
-    </div>
-    {Content && (
-      <div class="col-span-2">
-        <div class="mb-1 text-sm text-gray-400">
-          {year}.{month < 10 ? `0${month}` : month}.{day}
-        </div>
-        <div
-          class="mdx prose prose-dante max-w-none rounded-lg bg-white p-7 shadow"
-        >
-          <Content />
-        </div>
-      </div>
-    )}
+  <div class="mb-4 flex justify-end">
+    <a
+      href="https://github.com/sjuhan123/habit-morning"
+      class="flex items-center gap-1.5 text-xs text-gray-400 transition-colors hover:text-gray-700"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      기존 기록 공간
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5c.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.91-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.87 1.52 2.34 1.07 2.91.83c.09-.65.35-1.09.63-1.34c-2.22-.25-4.55-1.11-4.55-4.92c0-1.11.38-2 1.03-2.71c-.1-.25-.45-1.29.1-2.64c0 0 .84-.27 2.75 1.02c.79-.22 1.65-.33 2.5-.33c.85 0 1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.35.2 2.39.1 2.64c.65.71 1.03 1.6 1.03 2.71c0 3.82-2.34 4.66-4.57 4.91c.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2" />
+      </svg>
+    </a>
   </div>
+  <MemoryPanel
+    datesPosted={datesPosted}
+    initialYear={buildYear}
+    initialMonth={buildMonth}
+    currentDay={buildDay}
+    totalPosts={totalPosts}
+    client:load
+  />
+
+  <!-- Correct to browser's real today if build date differs -->
+  <script define:vars={{ buildYear, buildMonth, buildDay }}>
+    const now = new Date();
+    const todayYear = now.getFullYear();
+    const todayMonth = now.getMonth() + 1;
+    const todayDay = now.getDate();
+
+    if (todayYear !== buildYear || todayMonth !== buildMonth || todayDay !== buildDay) {
+      const mm = String(todayMonth).padStart(2, '0');
+      const dd = String(todayDay).padStart(2, '0');
+      window.location.replace(`/memory/${todayYear}-${mm}-${dd}`);
+    }
+  </script>
 </BaseLayout>

@@ -1,22 +1,27 @@
-import { useState } from 'react';
 import CheckSVG from './CheckSVG';
 import type { Date } from '../types/date';
 
 interface Props {
   datesPosted: Date[];
-  currentYear?: number;
-  currentMonth?: number;
+  year: number;
+  month: number;
+  highlightYear: number;
+  highlightMonth: number;
   currentDay?: number;
+  onYearChange: (year: number) => void;
+  onMonthChange: (month: number) => void;
 }
+
 const Calendar = ({
   datesPosted,
-  currentYear = new Date().getFullYear(),
-  currentMonth = new Date().getMonth() + 1,
+  year,
+  month,
+  highlightYear,
+  highlightMonth,
   currentDay = new Date().getDate(),
+  onYearChange,
+  onMonthChange,
 }: Props) => {
-  const [year, setYear] = useState(currentYear);
-  const [month, setMonth] = useState(currentMonth);
-
   const handleYearChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let newYear = parseInt(event.target.value);
     if (isNaN(newYear)) return;
@@ -26,7 +31,7 @@ const Calendar = ({
     } else if (newYear > new Date().getFullYear()) {
       newYear = new Date().getFullYear();
     }
-    setYear(newYear);
+    onYearChange(newYear);
   };
 
   const handleMonthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,11 +43,11 @@ const Calendar = ({
     } else if (newMonth > 12) {
       newMonth = 12;
     }
-    setMonth(newMonth);
+    onMonthChange(newMonth);
   };
 
   return (
-    <section className="flex h-[308px] flex-col gap-7 rounded-lg bg-white p-5 shadow">
+    <section className="flex min-h-[308px] flex-col gap-7 rounded-lg bg-white p-5 shadow">
       <div className="grid grid-cols-2">
         <div className="grid grid-cols-2 justify-items-center">
           <span className="text-gray-400">Year</span>
@@ -73,14 +78,7 @@ const Calendar = ({
             {dayName}
           </div>
         ))}
-        {renderCalendar(
-          year,
-          month,
-          currentDay,
-          datesPosted,
-          currentYear,
-          currentMonth,
-        )}
+        {renderCalendar(year, month, currentDay, datesPosted, highlightYear, highlightMonth)}
       </div>
     </section>
   );
@@ -93,8 +91,8 @@ const renderCalendar = (
   month: number,
   day: number,
   datesPosted: Date[],
-  currentYear: number,
-  currentMonth: number,
+  highlightYear: number,
+  highlightMonth: number,
 ) => {
   const totalDays = daysInMonth(year, month);
   const startingDay = firstDayOfWeek(year, month);
@@ -107,12 +105,11 @@ const renderCalendar = (
     const dayNumber = i + 1;
 
     const isPosted = datesPosted.some(
-      (date) =>
-        date.year === year && date.month === month && date.day === dayNumber,
+      (date) => date.year === year && date.month === month && date.day === dayNumber,
     );
 
     const isCurrentDay =
-      dayNumber === day && month === currentMonth && year === currentYear;
+      dayNumber === day && year === highlightYear && month === highlightMonth;
 
     const dayClassName = `relative cursor-pointer text-black hover:text-sky-400 hover:underline hover:decoration-sky-200 hover:decoration-2 hover:underline-offset-4 ${
       isCurrentDay
@@ -138,8 +135,7 @@ const renderCalendar = (
     );
   });
 
-  const nextMonthDaysCount =
-    (7 - ((prevMonthDays.length + currentMonthDays.length) % 7)) % 7;
+  const nextMonthDaysCount = (7 - ((prevMonthDays.length + currentMonthDays.length) % 7)) % 7;
 
   const nextMonthDays = Array.from({ length: nextMonthDaysCount }, (_, i) => (
     <div key={`next${i}`} className="other-month" />

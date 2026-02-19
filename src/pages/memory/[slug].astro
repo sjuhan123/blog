@@ -1,8 +1,7 @@
 ---
 import { type CollectionEntry, getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Notice from '../../components/Notice.astro';
-import Calender from '../../components/Calender';
+import MemoryPanel from '../../components/MemoryPanel';
 import type { Date } from '../../types/date';
 
 export async function getStaticPaths() {
@@ -44,28 +43,20 @@ const [year, month, day] = currentPostDate;
   image={{ src: '/dante-preview.jpg', alt: 'The preview of the site' }}
   showHeader={false}
 >
-  <div class="grid grid-cols-2 gap-6 sm:grid sm:grid-cols-2">
+  <div class="flex flex-col gap-6">
+    <MemoryPanel
+      datesPosted={datesPosted}
+      initialYear={year}
+      initialMonth={month}
+      currentDay={day}
+      totalPosts={totalPosts}
+      client:load
+    />
     <div>
-      <div class="mb-1 text-sm text-gray-400">달력</div>
-      <Calender
-        datesPosted={datesPosted}
-        currentYear={year}
-        currentMonth={month}
-        currentDay={day}
-        client:load
-      />
-    </div>
-    <div>
-      <div class="mb-1 text-sm text-gray-400">기록</div>
-      <Notice totalPosts={totalPosts} year={year} month={month} />
-    </div>
-    <div class="col-span-2">
       <div class="mb-1 text-sm text-gray-400">
         {year}.{month < 10 ? `0${month}` : month}.{day}
       </div>
-      <div
-        class="mdx prose prose-dante max-w-none rounded-lg bg-white p-7 shadow"
-      >
+      <div class="mdx prose prose-dante max-w-none rounded-lg bg-white p-7 shadow">
         <Content />
       </div>
     </div>
