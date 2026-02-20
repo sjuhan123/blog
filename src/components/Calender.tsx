@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import CheckSVG from './CheckSVG';
 import type { Date } from '../types/date';
 
@@ -22,28 +24,37 @@ const Calendar = ({
   onYearChange,
   onMonthChange,
 }: Props) => {
-  const handleYearChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let newYear = parseInt(event.target.value);
-    if (isNaN(newYear)) return;
+  const [yearInput, setYearInput] = useState(String(year));
+  const [monthInput, setMonthInput] = useState(String(month));
 
-    if (newYear < 2023) {
-      newYear = 2023;
-    } else if (newYear > new Date().getFullYear()) {
-      newYear = new Date().getFullYear();
+  useEffect(() => {
+    setYearInput(String(year));
+  }, [year]);
+
+  useEffect(() => {
+    setMonthInput(String(month));
+  }, [month]);
+
+  const commitYear = (raw: string) => {
+    const parsed = parseInt(raw, 10);
+    if (isNaN(parsed)) {
+      setYearInput(String(year));
+      return;
     }
-    onYearChange(newYear);
+    const clamped = Math.min(Math.max(parsed, 2023), new Date().getFullYear());
+    setYearInput(String(clamped));
+    onYearChange(clamped);
   };
 
-  const handleMonthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let newMonth = parseInt(event.target.value);
-    if (isNaN(newMonth)) return;
-
-    if (newMonth < 1) {
-      newMonth = 1;
-    } else if (newMonth > 12) {
-      newMonth = 12;
+  const commitMonth = (raw: string) => {
+    const parsed = parseInt(raw, 10);
+    if (isNaN(parsed)) {
+      setMonthInput(String(month));
+      return;
     }
-    onMonthChange(newMonth);
+    const clamped = Math.min(Math.max(parsed, 1), 12);
+    setMonthInput(String(clamped));
+    onMonthChange(clamped);
   };
 
   return (
@@ -52,23 +63,29 @@ const Calendar = ({
         <div className="grid grid-cols-2 justify-items-center">
           <span className="text-gray-400">Year</span>
           <input
-            type="number"
-            value={year}
-            onChange={handleYearChange}
+            type="text"
+            inputMode="numeric"
+            value={yearInput}
+            onChange={(e) => setYearInput(e.target.value)}
+            onBlur={() => commitYear(yearInput)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') commitYear(yearInput);
+            }}
             className="flex w-full text-center text-black underline decoration-sky-200 decoration-2 underline-offset-4 focus:outline-none"
-            min={2023}
-            max={new Date().getFullYear()}
           />
         </div>
         <div className="grid grid-cols-2 justify-items-center">
           <span className="text-gray-400">Month</span>
           <input
-            type="number"
-            value={month}
-            onChange={handleMonthChange}
+            type="text"
+            inputMode="numeric"
+            value={monthInput}
+            onChange={(e) => setMonthInput(e.target.value)}
+            onBlur={() => commitMonth(monthInput)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') commitMonth(monthInput);
+            }}
             className="flex w-full text-center text-black underline decoration-sky-200 decoration-2 underline-offset-4 focus:outline-none"
-            min={1}
-            max={12}
           />
         </div>
       </div>

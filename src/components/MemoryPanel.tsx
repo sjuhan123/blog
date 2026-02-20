@@ -47,9 +47,9 @@ const MemoryPanel = ({ datesPosted, initialYear, initialMonth, currentDay, total
             <div className="mt-7 flex flex-col gap-2">
               <span className="text-sm text-black">
                 기록한 날 총{' '}
-                <span className="underline decoration-sky-200 decoration-2 underline-offset-4">
-                  {totalPosts}일
-                </span>
+                <span className="mr-1 font-semibold underline decoration-sky-200 decoration-2 underline-offset-4">
+                  {totalPosts}
+                </span>일
               </span>
             </div>
           </div>
