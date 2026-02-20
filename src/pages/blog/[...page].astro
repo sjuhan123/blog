@@ -33,12 +33,12 @@ const isActive = Astro.params.page === undefined;
   image={{ src: '/dante-preview.jpg', alt: 'The preview of the site' }}
   showHeader={false}
 >
-  <div class="mb-12 flex gap-6 sm:mb-12">
+  <div class="mb-12 flex flex-wrap gap-x-6 gap-y-2">
     <a
       class:list={[
         'flex items-center gap-2',
         {
-          'underline decoration-sky-200 decoration-2 underline-offset-4':
+          'underline decoration-stone-400 decoration-2 underline-offset-4':
             isActive,
         },
       ]}
@@ -53,7 +53,7 @@ const isActive = Astro.params.page === undefined;
         const postCount = getPostsByTag(blog, tag.slug).length;
         return (
           <a class="flex items-center gap-2" href={`/blog/${tag.slug}`}>
-            <p class="font-serif text-sm font-medium leading-tight hover:underline hover:decoration-sky-200 hover:decoration-2 hover:underline-offset-4 md:text-base">
+            <p class="font-serif text-sm font-medium leading-tight hover:underline hover:decoration-stone-400 hover:decoration-2 hover:underline-offset-4 md:text-base">
               {tag.name} {postCount}
             </p>
           </a>

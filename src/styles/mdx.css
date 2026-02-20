@@ -81,6 +81,11 @@
 .mdx .anchor:hover {
   text-decoration: underline;
   text-decoration-thickness: 2px;
-  text-decoration-color: #bae6fd;
-  text-decoration-style: dashed;
+  text-decoration-color: #a8a29e; /* stone-400 */
+  text-decoration-style: solid;
+  text-underline-offset: 4px;
+}
+
+.mdx pre {
+  overflow-x: auto;
 }

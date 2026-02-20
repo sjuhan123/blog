@@ -20,9 +20,9 @@ const MemoryPanel = ({ datesPosted, initialYear, initialMonth, currentDay, total
   const goalText = monthlyGoals[goalKey] ?? '목표가 없습니다';
 
   return (
-    <div className="grid grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
       <div>
-        <div className="mb-1 text-sm text-gray-400">달력</div>
+        <div className="mb-1 text-sm text-main/50">달력</div>
         <Calender
           datesPosted={datesPosted}
           year={year}
@@ -35,19 +35,19 @@ const MemoryPanel = ({ datesPosted, initialYear, initialMonth, currentDay, total
         />
       </div>
       <div>
-        <div className="mb-1 text-sm text-gray-400">요약</div>
-        <section className="flex min-h-[308px] flex-col gap-11 rounded-lg bg-white p-5 shadow">
+        <div className="mb-1 text-sm text-main/50">요약</div>
+        <section className="flex min-h-[308px] flex-col gap-11 rounded-lg bg-muted p-5 shadow">
           <div>
-            <span className="text-sm text-gray-400">이달의 목표</span>
+            <span className="text-sm text-main/50">이달의 목표</span>
             <div className="mt-7">
-              <span className="text-sm text-black">{goalText}</span>
+              <span className="text-sm text-main">{goalText}</span>
             </div>
           </div>
-          <div className="border-t border-gray-100">
+          <div className="border-t border-main/20">
             <div className="mt-7 flex flex-col gap-2">
-              <span className="text-sm text-black">
+              <span className="text-sm text-main">
                 기록한 날 총{' '}
-                <span className="mr-1 font-semibold underline decoration-sky-200 decoration-2 underline-offset-4">
+                <span className="mr-1 font-semibold underline decoration-stone-400 decoration-2 underline-offset-4">
                   {totalPosts}
                 </span>일
               </span>
