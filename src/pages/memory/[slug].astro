@@ -56,7 +56,9 @@ const [year, month, day] = currentPostDate;
       <div class="mb-1 text-sm text-main/50">
         {year}.{month < 10 ? `0${month}` : month}.{day}
       </div>
-      <div class="mdx prose prose-dante max-w-none rounded-lg bg-muted p-7 shadow">
+      <div
+        class="mdx prose prose-dante max-w-none rounded-lg bg-muted p-7 shadow"
+      >
         <Content />
       </div>
     </div>

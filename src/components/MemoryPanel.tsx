@@ -12,7 +12,13 @@ interface Props {
   totalPosts: number;
 }
 
-const MemoryPanel = ({ datesPosted, initialYear, initialMonth, currentDay, totalPosts }: Props) => {
+const MemoryPanel = ({
+  datesPosted,
+  initialYear,
+  initialMonth,
+  currentDay,
+  totalPosts,
+}: Props) => {
   const [year, setYear] = useState(initialYear);
   const [month, setMonth] = useState(initialMonth);
 
@@ -49,7 +55,8 @@ const MemoryPanel = ({ datesPosted, initialYear, initialMonth, currentDay, total
                 기록한 날 총{' '}
                 <span className="mr-1 font-semibold underline decoration-stone-400 decoration-2 underline-offset-4">
                   {totalPosts}
-                </span>일
+                </span>
+                일
               </span>
             </div>
           </div>

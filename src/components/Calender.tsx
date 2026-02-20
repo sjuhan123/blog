@@ -95,7 +95,14 @@ const Calendar = ({
             {dayName}
           </div>
         ))}
-        {renderCalendar(year, month, currentDay, datesPosted, highlightYear, highlightMonth)}
+        {renderCalendar(
+          year,
+          month,
+          currentDay,
+          datesPosted,
+          highlightYear,
+          highlightMonth,
+        )}
       </div>
     </section>
   );
@@ -122,7 +129,8 @@ const renderCalendar = (
     const dayNumber = i + 1;
 
     const isPosted = datesPosted.some(
-      (date) => date.year === year && date.month === month && date.day === dayNumber,
+      (date) =>
+        date.year === year && date.month === month && date.day === dayNumber,
     );
 
     const isCurrentDay =
@@ -152,7 +160,8 @@ const renderCalendar = (
     );
   });
 
-  const nextMonthDaysCount = (7 - ((prevMonthDays.length + currentMonthDays.length) % 7)) % 7;
+  const nextMonthDaysCount =
+    (7 - ((prevMonthDays.length + currentMonthDays.length) % 7)) % 7;
 
   const nextMonthDays = Array.from({ length: nextMonthDaysCount }, (_, i) => (
     <div key={`next${i}`} className="other-month" />
