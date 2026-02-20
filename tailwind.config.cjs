@@ -27,7 +27,7 @@ module.exports = {
             '--tw-prose-links': theme('textColor.main / 100%'),
             '--tw-prose-bold': theme('textColor.main / 100%'),
             '--tw-prose-counters': theme('textColor.main / 100%'),
-            '--tw-prose-bullets': 'rgb(164 164 164)',
+            '--tw-prose-bullets': 'rgb(168 162 158)', /* stone-400 */
             '--tw-prose-hr': theme('borderColor.main / 100%'),
             '--tw-prose-quotes': theme('textColor.main / 100%'),
             '--tw-prose-quote-borders': theme('borderColor.main / 100%'),
@@ -44,13 +44,10 @@ module.exports = {
             a: {
               fontWeight: 'normal',
               textDecoration: 'underline',
-              textDecorationStyle: 'dashed',
-              textDecorationThickness: '1px',
-              textDecorationColor: 'hsla(0, 0%, 0%, .09)',
+              textDecorationStyle: 'solid',
+              textDecorationThickness: '2px',
+              textDecorationColor: 'rgb(168 162 158)', /* stone-400 */
               textUnderlineOffset: '4px',
-              '&:hover': {
-                textDecorationStyle: 'solid',
-              },
             },
             'h1,h2,h3': {
               fontFamily: theme('fontFamily.serif'),

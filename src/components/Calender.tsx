@@ -58,10 +58,10 @@ const Calendar = ({
   };
 
   return (
-    <section className="flex min-h-[308px] flex-col gap-7 rounded-lg bg-white p-5 shadow">
+    <section className="flex min-h-[308px] flex-col gap-7 rounded-lg bg-muted p-5 shadow">
       <div className="grid grid-cols-2">
         <div className="grid grid-cols-2 justify-items-center">
-          <span className="text-gray-400">Year</span>
+          <span className="text-main/50">Year</span>
           <input
             type="text"
             inputMode="numeric"
@@ -71,11 +71,11 @@ const Calendar = ({
             onKeyDown={(e) => {
               if (e.key === 'Enter') commitYear(yearInput);
             }}
-            className="flex w-full text-center text-black underline decoration-sky-200 decoration-2 underline-offset-4 focus:outline-none"
+            className="flex w-full bg-transparent text-center text-main underline decoration-stone-400 decoration-2 underline-offset-4 focus:outline-none"
           />
         </div>
         <div className="grid grid-cols-2 justify-items-center">
-          <span className="text-gray-400">Month</span>
+          <span className="text-main/50">Month</span>
           <input
             type="text"
             inputMode="numeric"
@@ -85,13 +85,13 @@ const Calendar = ({
             onKeyDown={(e) => {
               if (e.key === 'Enter') commitMonth(monthInput);
             }}
-            className="flex w-full text-center text-black underline decoration-sky-200 decoration-2 underline-offset-4 focus:outline-none"
+            className="flex w-full bg-transparent text-center text-main underline decoration-stone-400 decoration-2 underline-offset-4 focus:outline-none"
           />
         </div>
       </div>
       <div className="grid grid-cols-7 justify-items-center gap-2">
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((dayName) => (
-          <div key={`day-${dayName}`} className="text-gray-400">
+          <div key={`day-${dayName}`} className="text-main/50">
             {dayName}
           </div>
         ))}
@@ -128,9 +128,9 @@ const renderCalendar = (
     const isCurrentDay =
       dayNumber === day && year === highlightYear && month === highlightMonth;
 
-    const dayClassName = `relative cursor-pointer text-black hover:text-sky-400 hover:underline hover:decoration-sky-200 hover:decoration-2 hover:underline-offset-4 ${
+    const dayClassName = `relative cursor-pointer text-main hover:text-main hover:underline hover:decoration-stone-400 hover:decoration-2 hover:underline-offset-4 ${
       isCurrentDay
-        ? 'font-bold text-sky-400 underline decoration-sky-200 decoration-2 underline-offset-4'
+        ? 'font-bold text-main underline decoration-stone-400 decoration-2 underline-offset-4'
         : ''
     }`;
 

@@ -17,12 +17,12 @@ const { title } = post.data;
 
 <a
   class:list={[
-    'group flex flex-col gap-1 hover:underline hover:decoration-sky-200 hover:decoration-2 hover:underline-offset-4',
+    'group flex flex-col gap-1 hover:underline hover:decoration-stone-400 hover:decoration-2 hover:underline-offset-4',
     className,
   ]}
   href={`/blog/${post.slug}/`}
 >
-  <p class="text-sm text-gray-400">
+  <p class="text-sm text-main/50">
     {direction === 'prev' ? 'Previous' : 'Next'}
   </p>
   <p class="text-sm">{title}</p>
