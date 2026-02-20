@@ -1,0 +1,56 @@
+---
+interface Tag {
+  name: string;
+  slug: string;
+  count: number;
+}
+
+interface Props {
+  tags: Tag[];
+  totalCount: number;
+  currentTag?: string;
+}
+
+const { tags, totalCount, currentTag } = Astro.props;
+const isAllActive = currentTag === undefined;
+---
+
+<div class="mb-12 flex flex-wrap gap-x-6 gap-y-2">
+  <a
+    class:list={[
+      'flex items-center gap-2',
+      {
+        'underline decoration-stone-400 decoration-2 underline-offset-4':
+          isAllActive,
+      },
+    ]}
+    href="/blog"
+  >
+    <p class="font-serif text-sm font-medium leading-tight">
+      전체 {totalCount}
+    </p>
+  </a>
+  {
+    tags.map((tag) => {
+      const isActive = tag.slug === currentTag;
+      return (
+        <a
+          class:list={[
+            'flex items-center gap-2',
+            {
+              'underline decoration-stone-400 decoration-2 underline-offset-4':
+                isActive,
+              'hover:underline hover:decoration-stone-400 hover:decoration-2 hover:underline-offset-4':
+                !isActive,
+            },
+          ]}
+          href={`/blog/${tag.slug}`}
+        >
+          <p class="font-serif text-sm font-medium leading-tight md:text-base">
+            {tag.name} {tag.count}
+          </p>
+        </a>
+      );
+    })
+  }
+</div>

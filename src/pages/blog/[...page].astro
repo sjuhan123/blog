@@ -1,8 +1,9 @@
 ---
 import type { GetStaticPathsOptions, Page } from 'astro';
 import { type CollectionEntry, getCollection } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import TagFilter from '../../components/TagFilter.astro';
 import PostPreview from '../../components/PostPreview.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import siteConfig from '../../data/site-config';
 import {
   getAllTags,
@@ -19,12 +20,14 @@ type Props = { page: Page<CollectionEntry<'blog'>> };
 
 const { page } = Astro.props;
 const blog = page.data;
-const tags = getAllTags(blog).sort((tagA, tagB) => {
-  const postCountTagA = getPostsByTag(blog, tagA.slug).length;
-  const postCountTagB = getPostsByTag(blog, tagB.slug).length;
-  return postCountTagB - postCountTagA;
-});
-const isActive = Astro.params.page === undefined;
+const tags = getAllTags(blog)
+  .sort((tagA, tagB) => {
+    return (
+      getPostsByTag(blog, tagB.slug).length -
+      getPostsByTag(blog, tagA.slug).length
+    );
+  })
+  .map((tag) => ({ ...tag, count: getPostsByTag(blog, tag.slug).length }));
 ---
 
 <BaseLayout
@@ -33,33 +36,6 @@ const isActive = Astro.params.page === undefined;
   image={{ src: '/dante-preview.jpg', alt: 'The preview of the site' }}
   showHeader={false}
 >
-  <div class="mb-12 flex flex-wrap gap-x-6 gap-y-2">
-    <a
-      class:list={[
-        'flex items-center gap-2',
-        {
-          'underline decoration-stone-400 decoration-2 underline-offset-4':
-            isActive,
-        },
-      ]}
-      href="/blog"
-    >
-      <p class="font-serif text-sm font-medium leading-tight">
-        전체 {blog.length}
-      </p>
-    </a>
-    {
-      tags.map((tag) => {
-        const postCount = getPostsByTag(blog, tag.slug).length;
-        return (
-          <a class="flex items-center gap-2" href={`/blog/${tag.slug}`}>
-            <p class="font-serif text-sm font-medium leading-tight hover:underline hover:decoration-stone-400 hover:decoration-2 hover:underline-offset-4 md:text-base">
-              {tag.name} {postCount}
-            </p>
-          </a>
-        );
-      })
-    }
-  </div>
+  <TagFilter tags={tags} totalCount={blog.length} />
   {blog.map((post) => <PostPreview post={post} class="mb-10 sm:mb-12" />)}
 </BaseLayout>
