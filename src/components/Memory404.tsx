@@ -15,7 +15,7 @@ const Memory404 = ({ datesPosted, totalPosts }: Props) => {
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    const match = window.location.pathname.match(/^\/memory\/(\d{4})-(\d{2})-(\d{2})\/?$/);
+    const match = window.location.pathname.match(/^\/memory\/(\d{4})\/(\d{2})\/(\d{2})\/?$/);
     if (match) {
       setMemoryDate({
         year: parseInt(match[1]),
