@@ -13,7 +13,7 @@
     "test:run": "vitest run"
   },
   "engines": {
-    "node": ">=22.0.0"
+    "node": "20.x"
   },
   "dependencies": {
     "@astrojs/mdx": "^2.1.1",
