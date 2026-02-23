@@ -9,7 +9,7 @@ export async function getStaticPaths() {
 
   const totalPosts = posts.length;
   const datesPosted = posts.map(({ slug }) => {
-    const [year, month, day] = slug.split('-');
+    const [year, month, day] = slug.split('/');
     return { year: parseInt(year), month: parseInt(month), day: parseInt(day) };
   });
 
@@ -88,7 +88,7 @@ const buildDay = buildDate.getDate();
     ) {
       const mm = String(todayMonth).padStart(2, '0');
       const dd = String(todayDay).padStart(2, '0');
-      window.location.replace(`/memory/${todayYear}-${mm}-${dd}`);
+      window.location.replace(`/memory/${todayYear}/${mm}/${dd}`);
     }
   </script>
 </BaseLayout>
