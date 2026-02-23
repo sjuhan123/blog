@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Memory404 from '../components/Memory404';
+import type { Date } from '../types/date';
+
+const posts = await getCollection('memory');
+const totalPosts = posts.length;
+const datesPosted: Date[] = posts.map(({ slug }) => {
+  const [year, month, day] = slug.split('-');
+  return { year: parseInt(year), month: parseInt(month), day: parseInt(day) };
+});
+---
+
+<BaseLayout
+  title="404"
+  description="페이지를 찾을 수 없어요"
+  showHeader={false}
+>
+  <Memory404 datesPosted={datesPosted} totalPosts={totalPosts} client:only="react" />
+</BaseLayout>

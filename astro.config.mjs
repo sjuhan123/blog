@@ -7,13 +7,9 @@ import react from '@astrojs/react';
 import remarkToc from 'remark-toc';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
-import vercel from '@astrojs/vercel/serverless';
-
 // https://astro.build/config
 export default defineConfig({
   site: 'https://den-eight.vercel.app/',
-  output: 'hybrid',
-  adapter: vercel(),
   prefetch: false,
   markdown: {
     remarkPlugins: [[remarkToc, { heading: 'contents' }]],
