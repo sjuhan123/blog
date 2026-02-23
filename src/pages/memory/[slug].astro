@@ -1,40 +1,28 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
+export const prerender = false;
+
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import MemoryPanel from '../../components/MemoryPanel';
 import type { Date } from '../../types/date';
 
-export async function getStaticPaths() {
-  const posts = await getCollection('memory');
+const { slug } = Astro.params;
 
-  const totalPosts = posts.length;
-  const datesPosted = posts.map(({ slug }) => {
-    const [year, month, day] = slug.split('-');
-    return { year: parseInt(year), month: parseInt(month), day: parseInt(day) };
-  });
+const posts = await getCollection('memory');
+const totalPosts = posts.length;
+const datesPosted: Date[] = posts.map(({ slug }) => {
+  const [year, month, day] = slug.split('-');
+  return { year: parseInt(year), month: parseInt(month), day: parseInt(day) };
+});
 
-  return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: {
-      currentPost: post,
-      totalPosts,
-      datesPosted,
-      currentPostDate: post.slug.toString().split('-').map(Number),
-    },
-  }));
-}
+const currentPost = posts.find((p) => p.slug === slug);
+const Content = currentPost ? (await currentPost.render()).Content : null;
 
-type Props = {
-  currentPost: CollectionEntry<'memory'>;
-  totalPosts: number;
-  datesPosted: Date[];
-  currentPostDate: number[];
-};
-
-const { currentPost, totalPosts, datesPosted, currentPostDate } = Astro.props;
-const { Content } = await currentPost.render();
-
-const [year, month, day] = currentPostDate;
+const slugParts = (slug ?? '').split('-').map(Number);
+const [year, month, day] =
+  slugParts.length === 3 && slugParts.every(Boolean)
+    ? slugParts
+    : [new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()];
 ---
 
 <BaseLayout
@@ -54,13 +42,18 @@ const [year, month, day] = currentPostDate;
     />
     <div>
       <div class="mb-1 text-sm text-main/50">
-        {year}.{month < 10 ? `0${month}` : month}.{day}
+        {year}.{month < 10 ? `0${month}` : month}.{day < 10 ? `0${day}` : day}
       </div>
-      <div
-        class="mdx prose prose-dante max-w-none rounded-lg bg-muted p-7 shadow"
-      >
-        <Content />
-      </div>
+      {Content ? (
+        <div class="mdx prose prose-dante max-w-none rounded-lg bg-muted p-7 shadow">
+          <Content />
+        </div>
+      ) : (
+        <div class="flex min-h-[200px] flex-col items-center justify-center gap-3 rounded-lg bg-muted p-7 shadow">
+          <span class="text-4xl">📭</span>
+          <p class="text-sm text-main/50">이 날의 기록이 없어요.</p>
+        </div>
+      )}
     </div>
   </div>
 </BaseLayout>
