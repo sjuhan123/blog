@@ -71,7 +71,8 @@ const Calendar = ({
             onKeyDown={(e) => {
               if (e.key === 'Enter') commitYear(yearInput);
             }}
-            className="flex w-full bg-transparent text-center text-main underline decoration-stone-400 decoration-2 underline-offset-4 focus:outline-none"
+            style={{ width: `${yearInput.length + 0.5}ch` }}
+            className="min-w-[2ch] border-b-2 border-stone-400 bg-transparent text-center text-main focus:outline-none"
           />
         </div>
         <div className="grid grid-cols-2 justify-items-center">
@@ -85,7 +86,8 @@ const Calendar = ({
             onKeyDown={(e) => {
               if (e.key === 'Enter') commitMonth(monthInput);
             }}
-            className="flex w-full bg-transparent text-center text-main underline decoration-stone-400 decoration-2 underline-offset-4 focus:outline-none"
+            style={{ width: `${monthInput.length + 0.5}ch` }}
+            className="min-w-[2ch] border-b-2 border-stone-400 bg-transparent text-center text-main focus:outline-none"
           />
         </div>
       </div>
@@ -136,17 +138,16 @@ const renderCalendar = (
     const isCurrentDay =
       dayNumber === day && year === highlightYear && month === highlightMonth;
 
-    const dayClassName = `relative cursor-pointer text-main hover:text-main hover:underline hover:decoration-stone-400 hover:decoration-2 hover:underline-offset-4 ${
-      isCurrentDay
-        ? 'font-bold text-main underline decoration-stone-400 decoration-2 underline-offset-4'
-        : ''
-    }`;
+    const innerClass = isCurrentDay
+      ? 'font-bold underline decoration-stone-400 decoration-[3px] underline-offset-4'
+      : 'hover:underline hover:decoration-stone-400 hover:decoration-[3px] hover:underline-offset-4';
 
     return (
-      <div key={`day-${dayNumber}`} className={dayClassName}>
+      <div key={`day-${dayNumber}`} className="relative cursor-pointer text-main">
         {isPosted ? (
           <a
             href={`/memory/${year}/${month < 10 ? `0${month}` : month}/${dayNumber < 10 ? `0${dayNumber}` : dayNumber}`}
+            className={isCurrentDay ? innerClass : `no-underline ${innerClass}`}
           >
             {dayNumber}
             <div className="absolute left-4 top-0">
@@ -154,7 +155,7 @@ const renderCalendar = (
             </div>
           </a>
         ) : (
-          dayNumber
+          <span className={innerClass}>{dayNumber}</span>
         )}
       </div>
     );
