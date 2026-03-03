@@ -18,10 +18,10 @@ const isAllActive = currentTag === undefined;
 <div class="mb-12 flex flex-wrap gap-x-6 gap-y-2">
   <a
     class:list={[
-      'flex items-center gap-2',
+      'flex items-center gap-2 border-b-2 pb-0.5',
       {
-        'underline decoration-stone-400 decoration-2 underline-offset-4':
-          isAllActive,
+        'border-stone-400': isAllActive,
+        'border-transparent hover:border-stone-400': !isAllActive,
       },
     ]}
     href="/blog"
@@ -36,17 +36,15 @@ const isAllActive = currentTag === undefined;
       return (
         <a
           class:list={[
-            'flex items-center gap-2',
+            'flex items-center gap-2 border-b-2 pb-0.5',
             {
-              'underline decoration-stone-400 decoration-2 underline-offset-4':
-                isActive,
-              'hover:underline hover:decoration-stone-400 hover:decoration-2 hover:underline-offset-4':
-                !isActive,
+              'border-stone-400': isActive,
+              'border-transparent hover:border-stone-400': !isActive,
             },
           ]}
           href={`/blog/${tag.slug}`}
         >
-          <p class="font-serif text-sm font-medium leading-tight md:text-base">
+          <p class="font-serif text-sm font-medium leading-tight">
             {tag.name} {tag.count}
           </p>
         </a>
