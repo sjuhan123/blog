@@ -52,10 +52,6 @@ const siteConfig: SiteConfig = {
       text: '글',
       href: '/blog',
     },
-    {
-      text: '기록',
-      href: '/memory',
-    },
   ],
   hero: {
     text: `사용하기 <u>편리한 서비스</u>가 많은 사람들을 도울 수 있을 것이라 믿습니다.
