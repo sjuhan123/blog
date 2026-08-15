@@ -3,8 +3,34 @@ module.exports = {
   darkMode: 'class',
   theme: {
     fontFamily: {
-      sans: ['Spoqa Han Sans Neo,sans-serif'],
-      serif: ['Spoqa Han Sans Neo,sans-serif'],
+      sans: [
+        'Pretendard Variable',
+        'Pretendard',
+        '-apple-system',
+        'BlinkMacSystemFont',
+        'system-ui',
+        'Roboto',
+        'Helvetica Neue',
+        'Segoe UI',
+        'Apple SD Gothic Neo',
+        'Noto Sans KR',
+        'Malgun Gothic',
+        'sans-serif',
+      ],
+      serif: [
+        'Pretendard Variable',
+        'Pretendard',
+        '-apple-system',
+        'BlinkMacSystemFont',
+        'system-ui',
+        'Roboto',
+        'Helvetica Neue',
+        'Segoe UI',
+        'Apple SD Gothic Neo',
+        'Noto Sans KR',
+        'Malgun Gothic',
+        'sans-serif',
+      ],
     },
     extend: {
       textColor: {
@@ -57,14 +83,23 @@ module.exports = {
             h1: {
               fontSize: '22px',
               lineHeight: '1.2',
+              '@media (max-width: 640px)': {
+                fontSize: '20px',
+              },
             },
             h2: {
               fontSize: '20px',
               lineHeight: '1.2',
+              '@media (max-width: 640px)': {
+                fontSize: '18px',
+              },
             },
             h3: {
               fontSize: '18px',
               lineHeight: '1.2',
+              '@media (max-width: 640px)': {
+                fontSize: '16px',
+              },
             },
             p: {
               fontSize: '16px',
