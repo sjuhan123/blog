@@ -1,8 +1,9 @@
 ---
-import siteConfig from '../data/site-config';
 import '../styles/global.css';
 import '../styles/mdx.css';
 import '../styles/reset.css';
+
+import siteConfig from '../data/site-config';
 
 export type Props = {
   title?: string;
@@ -47,7 +48,10 @@ function formatCanonicalURL(url: string | URL) {
 <meta name="generator" content={Astro.generator} />
 
 <!-- Google Search Console verification -->
-<meta name="google-site-verification" content="pBFoK9L6V8p7dh1T7dKZO-8N937GC2x-bUjcQT5_9yI" />
+<meta
+  name="google-site-verification"
+  content="pBFoK9L6V8p7dh1T7dKZO-8N937GC2x-bUjcQT5_9yI"
+/>
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />

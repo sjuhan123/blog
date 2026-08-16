@@ -9,7 +9,7 @@ import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://den-eight.vercel.app/',
+  site: 'https://denslog.me/',
   prefetch: false,
   markdown: {
     remarkPlugins: [[remarkToc, { heading: 'contents' }]],
