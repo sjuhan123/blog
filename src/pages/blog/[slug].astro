@@ -1,10 +1,12 @@
 ---
 import { type CollectionEntry, getCollection } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
+
 import FormattedDate from '../../components/FormattedDate.astro';
-import { sortItemsByDateDesc } from '../../utils/data-utils';
 import TitlePreview from '../../components/TitlePreview.astro';
 import CommentSectionClient from '../../containers/comments/CommentSectionClient';
+import siteConfig from '../../data/site-config';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { sortItemsByDateDesc } from '../../utils/data-utils';
 
 export async function getStaticPaths() {
   const posts = (await getCollection('blog')).sort(sortItemsByDateDesc);
@@ -28,6 +30,24 @@ type Props = {
 const { post, prevPost, nextPost } = Astro.props;
 const { title, publishDate, excerpt, seo } = post.data;
 const { Content } = await post.render();
+
+const articleImage = seo?.image ?? siteConfig.image;
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: seo?.title ?? title,
+  description: seo?.description ?? excerpt,
+  datePublished: publishDate.toISOString(),
+  url: new URL(`/blog/${post.slug}/`, Astro.site).toString(),
+  author: {
+    '@type': 'Person',
+    name: '한승주',
+    url: Astro.site?.toString(),
+  },
+  ...(articleImage?.src && {
+    image: new URL(articleImage.src, Astro.site).toString(),
+  }),
+};
 ---
 
 <BaseLayout
@@ -36,6 +56,7 @@ const { Content } = await post.render();
   image={seo?.image}
   pageType="article"
   showHeader={false}
+  structuredData={articleSchema}
 >
   <article class="mb-10">
     <header class="mb-10">

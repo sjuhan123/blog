@@ -1,9 +1,23 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import siteConfig from '../data/site-config';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: '한승주',
+  url: Astro.site?.toString(),
+  sameAs: siteConfig.hero?.socialLinks
+    ?.filter((link) => link.href.startsWith('http'))
+    .map((link) => link.href),
+};
 ---
 
-<BaseLayout description={siteConfig.description} image={siteConfig.image}>
+<BaseLayout
+  description={siteConfig.description}
+  image={siteConfig.image}
+  structuredData={personSchema}
+>
   <Hero />
 </BaseLayout>
