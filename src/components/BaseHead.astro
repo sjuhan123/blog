@@ -10,12 +10,14 @@ export type Props = {
   description?: string;
   image?: { src: string; alt?: string };
   pageType?: 'website' | 'article';
+  noindex?: boolean;
 };
 
 const {
   description = '',
   image = siteConfig.image,
   pageType = 'website',
+  noindex = false,
 } = Astro.props;
 const title = [Astro.props.title, siteConfig.title].filter(Boolean).join(' | ');
 const resolvedImage = image?.src
@@ -70,6 +72,7 @@ function formatCanonicalURL(url: string | URL) {
 <!-- Page Metadata -->
 <link rel="canonical" href={formatCanonicalURL(canonicalURL)} />
 <meta name="description" content={description} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content={pageType} />

@@ -17,7 +17,9 @@ export default defineConfig({
   },
   integrations: [
     mdx(),
-    sitemap(),
+    sitemap({
+      filter: (page) => !page.includes('/memory/') && !page.endsWith('/memory')
+    }),
     tailwind({
       applyBaseStyles: false
     }),
