@@ -169,7 +169,7 @@ inquirer 기능들,
 
 chalk의 경우 혹은 CLI을 꾸미고 싶을 때, 사용할 수 있는 라이브러리 입니다.
 
-![](https://velog.velcdn.com/images/sjuhan123/post/ee2c6b30-36a2-4562-8a28-82376446bc3a/image.png)
+![chalk로 초록색으로 꾸민 'Your App is ready' 터미널 메시지](/blog/cra-boilerplate-1/chalk-message-example.png)
 
 > chalk를 사용해 "Your App is ready" 메시지를 초록초록하게 만들었다.
 
@@ -630,9 +630,9 @@ npm publish // 최초 배포이후에 배포시
 
 - `npx create-custumized-app 폴더이름`을 입력하면 실행가능합니다.
 
-![create-customized-app demo](https://velog.velcdn.com/images/sjuhan123/post/cd01867b-df9b-43da-b8cd-469d034a617c/image.gif)
+![create-customized-app 설치 및 실행 데모](/blog/cra-boilerplate-1/cli-install-demo.gif)
 
-![create-customized-app test](https://velog.velcdn.com/images/sjuhan123/post/28cfa533-76f1-4d13-bc88-1bbe097c283f/image.gif)
+![create-customized-app 실행 결과 테스트 화면](/blog/cra-boilerplate-1/cli-test-demo.gif)
 
 ## 패키지 버전 관리
 

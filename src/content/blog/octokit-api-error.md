@@ -73,13 +73,11 @@ export default useOctokit;
 
 에러 대응 로직을 구현하기 위해서 의도적으로 `oktokit.request`가 404 에러를 반환하도록 하고, `oktokit.request`의 응답값을 `res` 변수에 할당해서 `res`에 응답 데이터가 제대로 들어오는지 확인 해봤는데,
 
-![](https://velog.velcdn.com/images/sjuhan123/post/27df1d75-c706-4e67-9c64-5f4d6ff50a04/image.png)
+![console.log(res) 실행 전 크롬 콘솔창에 출력된 처리되지 않은 에러 메시지](/blog/octokit-api-error/unhandled-error-console.png)
 
 `console.log(res)`가 찍히기도 전에 내가 `throw` 하지 않은 Error 메시지가 크롬의 콘솔창에 찍혔습니다.
 
 그래서 어디서 에러 메시지가 `throw` 되고 있는지 확인하기 위해서 위 이미지에 나와 있는 에러메시지의 출처 코드가 있는 `index.js:36`을 눌러서 확인했습니다.
-
-![](https://velog.velcdn.com/images/sjuhan123/post/33fefe70-ㄴd003-4d76-b98e-cc89fc8eb1c9/image.gif)
 
 사용하고 있는 `octokit` 라이브러리 내부에서 내가 의도적으로 발생시킨 Error를 catch하고 `RequestError` 인스턴스를 throw 해서, 내가 찍은 `console.log(res)`는 무시되고 즉시 콘솔창에 인스턴스의 메시지가 출력하고 있었습니다.
 
@@ -89,11 +87,11 @@ export default useOctokit;
 
 try-catch문에서 catch문의 `exceptionVar`는 기본적으로 `unknown`을 가르킵니다.
 
-![](https://velog.velcdn.com/images/sjuhan123/post/a87a4b81-ecd0-44fb-84e6-cd4757085471/image.png)
+![catch문에서 error 변수의 타입이 기본적으로 unknown으로 추론되는 모습](/blog/octokit-api-error/catch-error-unknown-type.png)
 
 catch문의 `exceptionVar`인 `error`는 언제, 어떤 형태의 에러가 자기한테 올지 모릅니다.
 
-![](https://velog.velcdn.com/images/sjuhan123/post/9ca15fd9-d30d-4ecc-97f9-a5480955dad6/image.png)
+![error 객체의 형태를 알 수 없어 다양한 값이 들어올 수 있음을 보여주는 콘솔 로그](/blog/octokit-api-error/error-shape-unknown.png)
 
 그래서 `instanceof`를 이용해 `error`한테 `new RequestError` 인스턴스가 온다는 것을 알려줍니다.
 
@@ -104,7 +102,7 @@ catch (error) {
 }
 ```
 
-![](https://velog.velcdn.com/images/sjuhan123/post/a1646910-e182-442d-899e-0af74b478bae/image.png)
+![instanceof로 타입을 좁혀 RequestError의 status 속성에 접근한 결과](/blog/octokit-api-error/request-error-status-access.png)
 
 드디어 `octokit`이 던진 에러 인스턴스의 `status` 속성에 접근해서 HTTP 응답 코드를 프로젝트에 받아오는데 성공했습니다.
 
