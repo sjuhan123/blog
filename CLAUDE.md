@@ -48,3 +48,17 @@ Two collections defined in `src/content/config.ts`:
 - Single quotes, 2-space indent, trailing commas (see `.prettierrc.cjs`).
 - Imports must be sorted (`simple-import-sort`) and unused imports are errors.
 - Use `type` imports consistently (`@typescript-eslint/consistent-type-imports`).
+
+## Publishing a post from Obsidian
+
+Posts are drafted in the Obsidian vault (`iCloud~md~obsidian/Documents/개발공부/02. 영역/01. 블로그/02. 기술기록/`) and migrated here to publish. When asked to publish/deploy a post from Obsidian, do the following:
+
+1. **Pick an English slug** for the post (existing posts use English filenames even though titles are Korean, e.g. `cra-boilerplate-1`).
+2. **Images**: copy referenced images from the Obsidian note's `attachments/` folder into `public/blog/<slug>/`, renamed to short descriptive English names (not the timestamp filenames Obsidian's img-clip.nvim generates). Rewrite image links in the copied content from `attachments/foo.png` to `/blog/<slug>/foo.png`.
+3. **Frontmatter**: add `title`, `excerpt`, `publishDate` (`'Mon D YYYY'` format, matching existing posts), `tags` (English, Capitalized — see existing posts for the tag vocabulary already in use before inventing new ones), and `seo.description`. Draft these and show them for confirmation rather than guessing silently — they're editorial choices, not mechanical.
+4. **Obsidian wikilinks** (`[[note name]]`): the vault has internal links between notes that aren't public. Strip them to plain text unless the linked note is *also* a published post in this repo's `blog/` collection, in which case link to it via its slug instead.
+5. **Write** the result to `src/content/blog/<slug>.md`.
+6. **Verify**: run `npm run build` and confirm the new post's page + its images appear under `dist/blog/<slug>/` before committing. `dist/` is gitignored, this is just a sanity check.
+7. **Commit and push** to `main` — Vercel auto-deploys on push (no manual deploy step). Always show the diff/commit and get explicit confirmation before `git push`, even though the overall workflow is expected to repeat — publishing is a public, hard-to-quietly-undo action.
+
+Note: `public/` currently also has a couple of stray flat images (`노인복지관...png`) from before this per-post-folder convention existed. New posts should use `public/blog/<slug>/`, not the flat root.
