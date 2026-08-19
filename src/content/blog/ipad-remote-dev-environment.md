@@ -1,7 +1,7 @@
 ---
 title: 아이패드로 맥북에 원격 접속해서 개발하기
 excerpt: Blink Shell, Tailscale, tmux, nvim으로 아이패드/아이폰에서 집 맥북에 원격 접속해 개발하는 환경을 구축한 기록
-publishDate: 'Aug 18 2026'
+publishDate: 'Aug 17 2026'
 tags:
   - Tech
   - tmux

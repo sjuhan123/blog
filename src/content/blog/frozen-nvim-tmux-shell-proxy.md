@@ -1,7 +1,7 @@
 ---
 title: tmux에서 멈춘 nvim
 excerpt: nvim이 죽은 원인 특정까지의 기록
-publishDate: 'Aug 18 2026'
+publishDate: 'Aug 19 2026'
 tags:
   - Tech
   - tmux
