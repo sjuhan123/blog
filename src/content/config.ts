@@ -33,4 +33,8 @@ const memory = defineCollection({
   }),
 });
 
-export const collections = { blog, memory };
+const about = defineCollection({
+  schema: z.object({}),
+});
+
+export const collections = { blog, memory, about };

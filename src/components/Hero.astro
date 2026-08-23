@@ -1,15 +1,15 @@
 ---
 import { Icon } from 'astro-icon/components';
+import { getEntry } from 'astro:content';
 import siteConfig from '../data/site-config';
 
 const hero = siteConfig.hero;
+const bio = await getEntry('about', 'hero');
+const { Content } = await bio.render();
 ---
 
 {
-  (hero?.title ||
-    hero?.image?.src ||
-    hero?.text ||
-    (hero?.actions && hero.actions.length > 0)) && (
+  hero && (
     <section class="mb-16 flex w-full flex-col gap-2 sm:mb-24">
       {hero.title && (
         <h1 class="font-serif text-3xl font-medium leading-tight sm:text-5xl sm:leading-tight">
@@ -32,17 +32,8 @@ const hero = siteConfig.hero;
           )}
         </figure>
       )}
-      <div class="mb-6 flex flex-col gap-2 text-lg">
-        <p>
-          항상 직관적이고 사용하기 <b>편리한 서비스</b>를 개발하고자 합니다.
-        </p>
-        <p>다양한 이야기가 있는 공간을 이해하고, 경험하는 것을 좋아합니다.</p>
-      </div>
-      <div class="mb-6 flex flex-col gap-2 text-lg">
-        <p>
-          현재 <b>IT기기 사용에 어려움이 많은 어르신들을</b> 위한 서비스를
-          개발하고 있습니다.
-        </p>
+      <div class="mdx prose prose-dante mb-6 max-w-none text-lg">
+        <Content />
       </div>
       {hero.socialLinks && hero.socialLinks.length > 0 && (
         <div class="flex flex-wrap gap-3">

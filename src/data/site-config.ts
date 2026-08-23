@@ -16,8 +16,6 @@ export type Icon = {
 
 export type Hero = {
   title?: string;
-  text?: string;
-  textFooter?: string;
   image?: Image;
   socialLinks?: Icon[];
   actions?: Link[];
@@ -54,10 +52,6 @@ const siteConfig: SiteConfig = {
     },
   ],
   hero: {
-    text: `사용하기 <u>편리한 서비스</u>가 많은 사람들을 도울 수 있을 것이라 믿습니다.
-\n**유쾌한 경험**을 주는 UI/UX를 구현하는 것에서 뿌듯함과 성취감을 느낍니다.`,
-    textFooter:
-      '현재는 **IT기기 사용에 어려움이 많은 어르신들을** 위한 서비스를 개발하고 있습니다.',
     socialLinks: [
       {
         name: 'mdi:email-outline',
