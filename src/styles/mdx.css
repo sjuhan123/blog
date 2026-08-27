@@ -89,3 +89,88 @@
 .mdx pre {
   overflow-x: auto;
 }
+
+/* Footnotes (GFM `[^1]`) */
+.mdx sup {
+  line-height: 0;
+}
+
+.mdx sup [data-footnote-ref] {
+  padding: 0 0.15em;
+  font-size: 0.9em;
+  font-feature-settings: 'tnum' 1;
+  text-decoration: none;
+}
+
+.mdx sup [data-footnote-ref]:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.mdx .footnotes {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgb(var(--color-border-main) / 0.15);
+  color: rgb(var(--color-text-main) / 0.7);
+  font-size: 0.875rem;
+}
+
+/* Reveal the visually-hidden "Footnotes" label as a small muted heading */
+.mdx .footnotes #footnote-label {
+  position: static;
+  width: auto;
+  height: auto;
+  margin-bottom: 1rem;
+  overflow: visible;
+  clip: auto;
+  clip-path: none;
+  white-space: normal;
+  color: rgb(var(--color-text-main) / 0.5);
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.mdx .footnotes #footnote-label .anchor {
+  font-weight: inherit;
+}
+
+.mdx .footnotes ol li {
+  line-height: 1.6;
+}
+
+.mdx .footnotes ol li:before {
+  color: rgb(var(--color-text-main) / 0.45);
+}
+
+/* GFM wraps footnote content in a block <p>, which drops to a new line
+   after the inline-flex counter. Make it inline so it flows next to "1." */
+.mdx .footnotes ol li p {
+  display: inline;
+}
+
+.mdx .footnotes ol li p + p {
+  display: block;
+  margin-top: 0.5rem;
+}
+
+.mdx .data-footnote-backref {
+  margin-left: 0.25em;
+  /* Hide the raw `↩` (U+21A9), which iOS renders as a color emoji */
+  font-size: 0;
+  text-decoration: none;
+}
+
+.mdx .data-footnote-backref:after {
+  /* U+FE0E forces text (monochrome) presentation instead of emoji */
+  content: '\21A9\FE0E';
+  font-size: 1.15rem;
+  color: rgb(var(--color-text-main) / 0.5);
+}
+
+.mdx .data-footnote-backref:hover:after {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
