@@ -8,6 +8,7 @@ import siteConfig from '../../../data/site-config';
 import {
   getAllTags,
   getPostsByTag,
+  isKoreanTag,
   sortItemsByDateDesc,
 } from '../../../utils/data-utils';
 
@@ -29,6 +30,9 @@ type Props = { page: Page<CollectionEntry<'blog'>> };
 const allPosts = await getCollection('blog');
 const tags = getAllTags(allPosts)
   .sort((tagA, tagB) => {
+    const aIsKorean = isKoreanTag(tagA.name);
+    const bIsKorean = isKoreanTag(tagB.name);
+    if (aIsKorean !== bIsKorean) return aIsKorean ? -1 : 1;
     return (
       getPostsByTag(allPosts, tagB.slug).length -
       getPostsByTag(allPosts, tagA.slug).length

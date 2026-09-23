@@ -27,6 +27,12 @@ export function getAllTags(posts: CollectionEntry<'blog'>[]) {
     });
 }
 
+const HANGUL_PATTERN = /[ㄱ-ㆎ가-힣]/;
+
+export function isKoreanTag(name: string) {
+  return HANGUL_PATTERN.test(name);
+}
+
 export function getPostsByTag(
   posts: CollectionEntry<'blog'>[],
   tagSlug: string,
