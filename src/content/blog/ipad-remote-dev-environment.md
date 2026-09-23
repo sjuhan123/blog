@@ -4,7 +4,7 @@ excerpt: Blink Shell, Tailscale, tmux, nvim으로 아이패드/아이폰에서 �
 publishDate: 'Aug 17 2026'
 tags:
   - Tech
-  - tmux
+  - Tmux
   - Neovim
 seo:
   description: Blink Shell과 Tailscale, tmux, nvim을 조합해 아이패드에서 맥북에 원격 접속해 개발하는 환경을 구축한 과정과 실사용 후기

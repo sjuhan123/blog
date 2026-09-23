@@ -4,7 +4,7 @@ excerpt: nvim이 죽은 원인 특정까지의 기록
 publishDate: 'Aug 19 2026'
 tags:
   - Tech
-  - tmux
+  - Tmux
   - Neovim
 seo:
   description: tmux pane 위 nvim이 멈춘 원인을 ps, sample 같은 macOS 도구로 추적해 kiro-cli 셸 통합 프록시(figterm 계열)가 원인이었음을 밝혀낸 트러블슈팅 기록

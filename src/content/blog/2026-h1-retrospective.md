@@ -3,7 +3,7 @@ title: 2026년 상반기 회고
 excerpt: 결혼, 새로운 업무 그리고 고민
 publishDate: 'Sep 23 2026'
 tags:
-  - retrospective
+  - 회고
 seo:
   description: 결혼, 새로운 업무 그리고 고민
 ---

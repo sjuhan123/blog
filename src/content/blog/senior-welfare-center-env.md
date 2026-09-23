@@ -3,7 +3,7 @@ title: Github Actions, Docker 사용시 Vite 환경변수 주입받기
 excerpt: migration 이후 고장난 카카오 로그인 살리자
 publishDate: 'Apr 13 2024'
 tags:
-  - Senior Welfare Center
+  - 노인복지관
 seo:
   image:
     src: '/post-2.jpg'

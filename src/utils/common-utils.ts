@@ -13,5 +13,13 @@ export function slugify(input?: string) {
   // replace multiple spaces or hyphens with a single hyphen
   slug = slug.replace(/[\s-]+/g, '-');
 
+  // non-Latin scripts (e.g. Korean) get fully stripped by the rules above,
+  // collapsing every such tag to the same empty slug. Fall back to the
+  // original text (Astro encodes the URI itself when routing/building) so
+  // distinct tags don't collide.
+  if (!slug) {
+    return input.trim().replace(/\s+/g, '-');
+  }
+
   return slug;
 }

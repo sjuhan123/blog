@@ -3,7 +3,7 @@ title: 노인복지관 프로젝트 문제점과 개선 계획
 excerpt: 기존 프로젝트 구조와 배포 방식의 문제점을 정리하고, 개선을 위한 계획을 세워보겠습니다.
 publishDate: 'Mar 29 2024'
 tags:
-  - Senior Welfare Center
+  - 노인복지관
 seo:
   image:
     src: '/post-2.jpg'

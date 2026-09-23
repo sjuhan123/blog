@@ -23,8 +23,12 @@ describe('slugify', () => {
     expect(slugify('foo  bar')).toBe('foo-bar');
   });
 
-  it('strips non-ASCII characters like Korean', () => {
-    expect(slugify('한글 태그')).toBe('');
+  it('keeps non-Latin scripts like Korean instead of stripping them', () => {
+    expect(slugify('한글 태그')).toBe('한글-태그');
+  });
+
+  it('keeps distinct Korean tags from colliding on the same slug', () => {
+    expect(slugify('회고')).not.toBe(slugify('노인복지관'));
   });
 
   it('removes special characters', () => {
