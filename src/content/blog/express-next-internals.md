@@ -130,4 +130,4 @@ c.length; // 1 -> 기본값 있는 매개변수를 만나면 거기서 세기를
 
 정리하면, Express는 등록된 핸들러를 Layer라는 객체로 감싸 배열에 저장하고, `next`는 그 배열의 인덱스를 증가시키며 순회하는 클로저다. 에러가 전파되는 중인지 아닌지는 함수의 선언된 매개변수 개수(`.length`)로 구분한다.
 
-[^1]: 이 글에서 인용한 소스는 Express 4.19.2 기준이다. https://github.com/expressjs/express/blob/4.19.2/lib/router/index.js
+[^1]: Express 4.19.2 버전 소스 참고. https://github.com/expressjs/express/blob/4.19.2/lib/router/index.js
