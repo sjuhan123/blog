@@ -9,6 +9,28 @@ seo:
   description: Express의 next()가 Layer 배열을 순회하는 클로저라는 점과, 에러 핸들러 판별에 함수의 선언된 매개변수 개수(length)가 쓰이는 이유를 소스코드로 확인했다.
 ---
 
+Express의 `next()`는 미들웨어 체인에서 다음 함수로 제어를 넘기는 함수다. 예를 들어 이런 라우트 등록 코드가 있다.
+
+```js
+router.get('/:id', authenticateToken, requireAdmin, getResource);
+```
+
+이 라우트로 요청이 오면 `authenticateToken`, `requireAdmin`, `getResource` 세 함수가 순서대로 실행된다. 각 함수는 `(req, res, next)`를 받고, 자기 할 일을 끝내면 `next()`를 호출해서 다음 함수로 넘긴다.
+
+```js
+const authenticateToken = async (req, res, next) => {
+  const token = req.cookies?.token;
+  if (!token) return res.status(401).json({ message: 'Unauthorized' });
+
+  req.user = await verifyToken(token);
+  next();
+};
+```
+
+토큰이 없으면 `next()`를 안 부르고 바로 응답을 끝내고, 있으면 검증 후 `next()`를 불러서 다음 함수로 넘어간다. 그런데 이 `next()`는 내부적으로 어떻게 동작할까?
+
+## next 기본 동작
+
 Express에서 `router.get(path, handler)`처럼 미들웨어나 라우트를 등록하면, Express는 그 핸들러 함수를 `Layer`라는 객체로 감싸서 라우터 내부의 `stack`이라는 배열에 넣는다.
 
 ```js
@@ -20,9 +42,7 @@ function Layer(path, options, fn) {
 
 라우터 하나는 `stack = [Layer1, Layer2, Layer3, ...]` 형태의 배열로 이루어져 있고, 요청이 들어오면 이 배열을 순서대로 순회하면서 각 Layer 안의 핸들러를 실행한다. 이 배열을 순회하는 역할을 하는 게 `next`다.
 
-## next 기본 동작
-
-`express/lib/router/index.js`를 보면, 라우터 하나당 `next`라는 함수가 정의되어 있다. 이 함수는 `idx`(지금 몇 번째 Layer까지 진행했는지), `stack`(그 라우터의 Layer 배열), `req`, `res`를 클로저로 붙잡고 있다.
+`express/lib/router/index.js`[^1]를 보면, 라우터 하나당 `next`라는 함수가 정의되어 있다. 이 함수는 `idx`(지금 몇 번째 Layer까지 진행했는지), `stack`(그 라우터의 Layer 배열), `req`, `res`를 클로저로 붙잡고 있다.
 
 ```js
 var idx = 0;
@@ -36,9 +56,43 @@ function next(err) {
 
 미들웨어 A 안에서 부르는 `next`와 미들웨어 B가 받는 `next`는 서로 다른 함수가 아니라 동일한 함수를 참조한다. 요청 하나당 생성된 이 클로저 하나가 체인 전체에 계속 전달되면서 `idx`만 증가시킨다. `next()`를 호출한다는 건, 이 클로저 안의 `idx`를 1 늘리고 `stack[idx]`에 있는 Layer를 꺼내서 실행한다고 볼 수 있다.
 
-## 에러 상황에서의 동작
+## next(error)의 동작
 
-`next(error)`처럼 인자를 넘기면 일반 미들웨어를 건너뛰고 에러 핸들러로 바로 넘어간다. 이걸 가능하게 하는 게 `handle_error`다.
+위 `authenticateToken`에서 직접 에러 응답을 만드는 대신 `next(error)`로 넘기면 이렇게 쓸 수 있다.
+
+```js
+const authenticateToken = async (req, res, next) => {
+  const token = req.cookies?.token;
+  if (!token) return next({ status: 401, message: 'Unauthorized' }); // highlight-line
+
+  req.user = await verifyToken(token);
+  next();
+};
+
+router.get('/:id', authenticateToken, handler);
+
+// 모든 라우터를 등록한 뒤, 맨 마지막에 추가하는 에러 핸들러
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).json({ message: err.message });
+});
+```
+
+앞서 본 `next`는 `err`를 받아도 그냥 무시하고 `handle_request`만 호출했다. 실제로는 `err`가 있으면 `handle_error`를, 없으면 `handle_request`를 호출한다.
+
+```js
+function next(err) {
+  var layerError = err;
+  var layer = stack[idx++];
+
+  if (layerError) {
+    layer.handle_error(layerError, req, res, next); // 있으면 handle_error로
+  } else {
+    layer.handle_request(req, res, next); // 없으면 handle_request로
+  }
+}
+```
+
+`authenticateToken`이 `next(error)`를 호출하면, 이 분기에 따라 다음 Layer의 `handle_error`가 호출된다.
 
 ```js
 Layer.prototype.handle_error = function (error, req, res, next) {
@@ -50,7 +104,7 @@ Layer.prototype.handle_error = function (error, req, res, next) {
 };
 ```
 
-`next(error)`로 에러가 전파되는 중에, `next`가 `stack`을 순회하며 `fn.length !== 4`인 Layer를 계속 건너뛰다가 4개짜리를 만나면 멈춰서 그 핸들러를 실행한다. 반대로 에러가 없는 정상 흐름에서는 `handle_request`가 `fn.length > 3`인 Layer를 건너뛴다. 4개짜리 함수는 에러 핸들러로 간주해서 정상 흐름에서는 아예 호출하지 않는다.
+에러가 전파되는 동안 `handle_error`는 `fn.length !== 4`인 Layer마다 `next(error)`를 다시 불러 건너뛰다가, 4개짜리 핸들러를 만나면 멈춰서 실행한다. 반대로 에러가 없는 정상 흐름에서는 `handle_request`가 `fn.length > 3`인 Layer를 건너뛴다. 4개짜리 함수는 에러 핸들러로 간주해서 정상 흐름에서는 아예 호출하지 않는다.
 
 ```js
 // 핸들러 예시
@@ -72,4 +126,8 @@ c.length; // 1 -> 기본값 있는 매개변수를 만나면 거기서 세기를
 
 </details>
 
+그래서 각 미들웨어는 에러 응답을 직접 처리할 필요 없이 `next(error)`만 호출하면 되고, 맨 끝의 에러 핸들러에서 에러 응답을 한 번에 처리하면 된다.
+
 정리하면, Express는 등록된 핸들러를 Layer라는 객체로 감싸 배열에 저장하고, `next`는 그 배열의 인덱스를 증가시키며 순회하는 클로저다. 에러가 전파되는 중인지 아닌지는 함수의 선언된 매개변수 개수(`.length`)로 구분한다.
+
+[^1]: 이 글에서 인용한 소스는 Express 4.19.2 기준이다. https://github.com/expressjs/express/blob/4.19.2/lib/router/index.js
