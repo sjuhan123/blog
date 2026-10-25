@@ -90,6 +90,14 @@
   overflow-x: auto;
 }
 
+.mdx .line.highlighted {
+  display: block;
+  background: rgba(255, 196, 0, 0.12);
+  border-left: 2px solid rgba(255, 196, 0, 0.55);
+  margin-left: -0.5rem;
+  padding-left: 0.5rem;
+}
+
 .mdx :not(pre) > code {
   font-family:
     ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;

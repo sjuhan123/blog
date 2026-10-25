@@ -8,13 +8,17 @@ import remarkToc from 'remark-toc';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeImageFigure from './src/plugins/rehype-image-figure.mjs';
+import { shikiHighlightLine } from './src/plugins/shiki-highlight-line.mjs';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://denslog.me/',
   prefetch: false,
   markdown: {
     remarkPlugins: [[remarkToc, { heading: 'contents' }]],
-    rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: 'wrap', properties: { className: 'anchor' } }], rehypeImageFigure]
+    rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: 'wrap', properties: { className: 'anchor' } }], rehypeImageFigure],
+    shikiConfig: {
+      transformers: [shikiHighlightLine()]
+    }
   },
   integrations: [
     mdx(),
