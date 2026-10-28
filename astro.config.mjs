@@ -18,6 +18,10 @@ export default defineConfig({
     rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: 'wrap', properties: { className: 'anchor' } }], rehypeImageFigure],
     shikiConfig: {
       transformers: [shikiHighlightLine()]
+    },
+    remarkRehype: {
+      footnoteLabel: '각주',
+      footnoteBackLabel: '본문으로 돌아가기'
     }
   },
   integrations: [
