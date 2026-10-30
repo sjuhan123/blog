@@ -28,7 +28,7 @@ type Props = {
 };
 
 const { post, prevPost, nextPost } = Astro.props;
-const { title, publishDate, excerpt, seo } = post.data;
+const { title, publishDate, excerpt, tags, seo } = post.data;
 const { Content } = await post.render();
 
 const articleImage = seo?.image ?? siteConfig.image;
@@ -39,11 +39,13 @@ const articleSchema = {
   description: seo?.description ?? excerpt,
   datePublished: publishDate.toISOString(),
   url: new URL(`/blog/${post.slug}/`, Astro.site).toString(),
+  inLanguage: 'ko',
   author: {
     '@type': 'Person',
     name: '한승주',
     url: Astro.site?.toString(),
   },
+  ...(tags.length > 0 && { keywords: tags.join(', ') }),
   ...(articleImage?.src && {
     image: new URL(articleImage.src, Astro.site).toString(),
   }),
